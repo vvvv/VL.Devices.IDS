@@ -1,8 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Document xmlns:p="property" xmlns:r="reflection" Id="TEoViClnIiPLPD6d5SyQmz" LanguageVersion="2023.5.3-0349-g416621bccc" Version="0.128">
-  <NugetDependency Id="R3sWC8Aqk6BOEAE2UjKeGh" Location="VL.CoreLib" Version="2023.5.3-0349-g416621bccc" />
+<Document xmlns:p="property" xmlns:r="reflection" Id="TEoViClnIiPLPD6d5SyQmz" LanguageVersion="2023.5.3-0365-gfe42142fdf" Version="0.128">
+  <NugetDependency Id="R3sWC8Aqk6BOEAE2UjKeGh" Location="VL.CoreLib" Version="2023.5.3-0365-gfe42142fdf" />
   <Patch Id="EeTlA4Q3fthPdUynd1PrC4">
-    <Canvas Id="JDCTBaxsmzqOxqFLyMxKgM" DefaultCategory="IO.IDSPeak" CanvasType="FullCategory" />
+    <Canvas Id="JDCTBaxsmzqOxqFLyMxKgM" DefaultCategory="IO.IDSPeak" CanvasType="FullCategory">
+      <!--
+
+    ************************ ListDevices ************************
+
+-->
+      <Node Name="ListDevices" Bounds="267,190" Id="LqyoY6bQUxwQZ5SyxDoyY4">
+        <p:NodeReference>
+          <Choice Kind="ForwardDefinition" Name="Forward" />
+          <CategoryReference Kind="Category" Name="Primitive" />
+        </p:NodeReference>
+        <p:TypeAnnotation LastCategoryFullName="IO.IDSPeak" LastDependency="VL.IDSPeak.Utils.dll">
+          <Choice Kind="TypeFlag" Name="ListDevices" />
+        </p:TypeAnnotation>
+        <Patch Id="L4f9A9F6ZjINR1LWWdo1yR">
+          <Canvas Id="IWif1xSgapxQRc8s4E39CI" BordersChecked="false" CanvasType="Group" />
+          <ProcessDefinition Id="HCPBNxQk0UbPLSKOnYZaUl" IsHidden="true" />
+        </Patch>
+      </Node>
+    </Canvas>
     <!--
 
     ************************ Application ************************
@@ -24,6 +43,5 @@
       </Patch>
     </Node>
   </Patch>
-  <ProjectDependency Id="SbgugXHcW2xL7xMxTtlkMa" Location="./csharp/VL.IDSPeak.Utils/VL.IDSPeak.Utils.csproj" />
-  <PlatformDependency Id="BdZut7Zq7FHODPBb7BUvQC" Location="./lib/net6.0/ids_peak_dotnet.dll" />
+  <PlatformDependency Id="CfRvGoxLYA3PcvNec67eU1" Location="./lib/net6.0/VL.IDSPeak.Utils.dll" />
 </Document>

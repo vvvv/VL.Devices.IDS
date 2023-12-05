@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document xmlns:p="property" xmlns:r="reflection" Id="Pgm1kAJUKLINfqGxTxoqce" LanguageVersion="2023.5.3-0365-gfe42142fdf" Version="0.128">
+  <NugetDependency Id="Q9Tj6aKzwwmMGVbSNKzOPX" Location="VL.CoreLib" Version="2023.5.3-0365-gfe42142fdf" />
+  <Patch Id="HqNcRBC9fevQLOlWrMJebq">
+    <Canvas Id="VVWL1exehLANYBjl42Upnf" DefaultCategory="Main" BordersChecked="false" CanvasType="FullCategory" />
+    <!--
+
+    ************************ Application ************************
+
+-->
+    <Node Name="Application" Bounds="100,100" Id="QLEcGjD9VKeMVgmQh8TPUZ">
+      <p:NodeReference>
+        <Choice Kind="ContainerDefinition" Name="Process" />
+        <CategoryReference Kind="Category" Name="Primitive" />
+      </p:NodeReference>
+      <Patch Id="DuXhi9OArWAOc6GNXZpqmb">
+        <Canvas Id="BwazeuqC1CmMEgL6EpXBPO" CanvasType="Group">
+          <Node Bounds="283,205,56,26" Id="N6eQTYUHj9nPQhXfpL1jxL">
+            <p:NodeReference LastCategoryFullName="IO.IDSPeak.ListDevices" LastDependency="VL.IDSPeak.vl">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <CategoryReference Kind="ClassType" Name="ListDevices" />
+              <Choice Kind="OperationCallFlag" Name="Create" />
+            </p:NodeReference>
+            <Pin Id="LBPmsqoHTgvQKgyzMyAf50" Name="Output" Kind="StateOutputPin" />
+          </Node>
+          <Pad Id="At6qukMgdlcPOClje3hxcU" SlotId="AMU6LsKVdbTLaul0lYkqkt" Bounds="285,271" />
+          <Node Bounds="271,320,80,80" Id="B7ygtBgOwcXQNCUjPRMqBI">
+            <p:NodeReference LastCategoryFullName="Primitive" LastDependency="Builtin">
+              <Choice Kind="StatefulRegion" Name="Region (Stateful)" Fixed="true" />
+              <CategoryReference Kind="Category" Name="Primitive" />
+              <Choice Kind="ProcessStatefulRegion" Name="Cache" />
+            </p:NodeReference>
+            <Pin Id="SIsvjhiaRjdPtmF8pu8SMe" Name="Force" Kind="InputPin" />
+            <Pin Id="P7PMVil34kcLfvyWnRzGpE" Name="Dispose Cached Outputs" Kind="InputPin" />
+            <Pin Id="AJCNHzhLGv2OOwhCOJIjfM" Name="Has Changed" Kind="OutputPin" />
+            <Patch Id="GH7iJW6K5bKOV6pLElGmNo" ManuallySortedPins="true">
+              <Patch Id="EMjiOYrVhqNO1IzGJQjkt6" Name="Create" ManuallySortedPins="true" />
+              <Patch Id="LmkTfAw9oNsMThVTeNUWvd" Name="Then" ManuallySortedPins="true" />
+              <Node Bounds="283,348,56,26" Id="KVfZVvVPngwLlsX21UoDT5">
+                <p:NodeReference LastCategoryFullName="IO.IDSPeak.ListDevices" LastDependency="VL.IDSPeak.vl">
+                  <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+                  <CategoryReference Kind="ClassType" Name="ListDevices" />
+                  <Choice Kind="OperationCallFlag" Name="Update" />
+                </p:NodeReference>
+                <Pin Id="ApueO19LzhkPFMFyQD6kor" Name="Input" Kind="StateInputPin" />
+                <Pin Id="Dq9UsCAlMOfP6gNOTm5Zmz" Name="Update" Kind="InputPin" />
+                <Pin Id="Hu86ANseqOEMR9B1AWXC9j" Name="Output" Kind="StateOutputPin" />
+              </Node>
+            </Patch>
+          </Node>
+          <Pad Id="F6p3MoXlGvANmzzJ73bDr3" Comment="Force" Bounds="315,286,35,15" ShowValueBox="true" isIOBox="true" Value="False">
+            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="ImmutableTypeFlag" Name="Boolean" />
+            </p:TypeAnnotation>
+            <p:ValueBoxSettings>
+              <p:buttonmode p:Assembly="VL.UI.Forms" p:Type="VL.HDE.PatchEditor.Editors.ButtonModeEnum">Bang</p:buttonmode>
+            </p:ValueBoxSettings>
+          </Pad>
+        </Canvas>
+        <Patch Id="LXunrCCTdysPcNciL4Upy1" Name="Create" ParticipatingElements="N6eQTYUHj9nPQhXfpL1jxL,QF3UsDg0BiLPTIk4cnkNwn" />
+        <Patch Id="QmZlxI5qG6lPoJhwioMVNy" Name="Update" />
+        <ProcessDefinition Id="JfDTYn99I8YOM81n7WTERu">
+          <Fragment Id="BEyEUiWZZ31Nk9lcc4XHBm" Patch="LXunrCCTdysPcNciL4Upy1" Enabled="true" />
+          <Fragment Id="NPUfao2bI8XMogMZM7dBsS" Patch="QmZlxI5qG6lPoJhwioMVNy" Enabled="true" />
+        </ProcessDefinition>
+        <Slot Id="AMU6LsKVdbTLaul0lYkqkt" Name="List Devices" />
+        <Link Id="QF3UsDg0BiLPTIk4cnkNwn" Ids="LBPmsqoHTgvQKgyzMyAf50,At6qukMgdlcPOClje3hxcU" />
+        <Link Id="TAvbqD4Q8f6NqETX268hCi" Ids="At6qukMgdlcPOClje3hxcU,ApueO19LzhkPFMFyQD6kor" />
+        <Link Id="GWa6dCm6UelODR3k1TNDpZ" Ids="F6p3MoXlGvANmzzJ73bDr3,SIsvjhiaRjdPtmF8pu8SMe" />
+      </Patch>
+    </Node>
+  </Patch>
+  <NugetDependency Id="T7otMm6hGgTP2z6fvOeYVL" Location="VL.IDSPeak" Version="0.0.0" />
+</Document>
