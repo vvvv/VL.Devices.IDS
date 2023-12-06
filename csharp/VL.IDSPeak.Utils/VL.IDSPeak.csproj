@@ -16,6 +16,9 @@
     <Reference Include="ids_peak_dotnet">
       <HintPath>..\..\dependencies\ids_peak_dotnet.dll</HintPath>
     </Reference>
+    <Reference Include="ids_peak_ipl_dotnet">
+      <HintPath>..\..\dependencies\ids_peak_ipl_dotnet.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
@@ -29,10 +32,6 @@
     <None Update="ids_peak_dotnet_interface.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>
