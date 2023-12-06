@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "vvvv gamma 5.3": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\vvvv\\vvvv_gamma_5.3-0368-g2897901e27\\vvvv.exe",
+      "commandLineArgs": "--package-repositories \"D:\\Documents\\dev\\libraries\" --editable-packages \"VL.IDSPeak\" -o \"D:\\Documents\\dev\\libraries\\VL.IDSPeak\\help\\HowTo List connected IDS cameras.vl\"",
+      "workingDirectory": "C:\\Program Files\\vvvv\\vvvv_gamma_5.3-0368-g2897901e27"
+    }
+  }
+}
