@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Document xmlns:p="property" xmlns:r="reflection" Id="Pgm1kAJUKLINfqGxTxoqce" LanguageVersion="2023.5.3-0365-gfe42142fdf" Version="0.128">
-  <NugetDependency Id="Q9Tj6aKzwwmMGVbSNKzOPX" Location="VL.CoreLib" Version="2023.5.3-0365-gfe42142fdf" />
+<Document xmlns:p="property" xmlns:r="reflection" Id="Pgm1kAJUKLINfqGxTxoqce" LanguageVersion="2023.5.3-0368-g2897901e27" Version="0.128">
+  <NugetDependency Id="Q9Tj6aKzwwmMGVbSNKzOPX" Location="VL.CoreLib" Version="2023.5.3-0368-g2897901e27" />
   <Patch Id="HqNcRBC9fevQLOlWrMJebq">
     <Canvas Id="VVWL1exehLANYBjl42Upnf" DefaultCategory="Main" BordersChecked="false" CanvasType="FullCategory" />
     <!--
@@ -15,58 +15,38 @@
       </p:NodeReference>
       <Patch Id="DuXhi9OArWAOc6GNXZpqmb">
         <Canvas Id="BwazeuqC1CmMEgL6EpXBPO" CanvasType="Group">
-          <Node Bounds="283,205,56,26" Id="N6eQTYUHj9nPQhXfpL1jxL">
-            <p:NodeReference LastCategoryFullName="IO.IDSPeak.ListDevices" LastDependency="VL.IDSPeak.vl">
+          <Node Bounds="408,349,51,19" Id="GQDkh0DoY6oOxS1LF7ttzx">
+            <p:NodeReference LastCategoryFullName="VL.IDSPeak" LastDependency="VL.IDSPeak.vl">
               <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
-              <CategoryReference Kind="ClassType" Name="ListDevices" />
-              <Choice Kind="OperationCallFlag" Name="Create" />
+              <Choice Kind="ProcessAppFlag" Name="VideoIn" />
             </p:NodeReference>
-            <Pin Id="LBPmsqoHTgvQKgyzMyAf50" Name="Output" Kind="StateOutputPin" />
+            <Pin Id="RCMwOaPuIBlQHWm3ljz43m" Name="Has Error" Kind="InputPin" />
+            <Pin Id="BbnjDwv9OXuMlasBqjYcss" Name="Bitmap" Kind="InputPin" />
+            <Pin Id="RFcoAx5yXpXOGviov1kUDc" Name="Result" Kind="OutputPin" />
           </Node>
-          <Pad Id="At6qukMgdlcPOClje3hxcU" SlotId="AMU6LsKVdbTLaul0lYkqkt" Bounds="285,271" />
-          <Node Bounds="271,320,80,80" Id="B7ygtBgOwcXQNCUjPRMqBI">
-            <p:NodeReference LastCategoryFullName="Primitive" LastDependency="Builtin">
-              <Choice Kind="StatefulRegion" Name="Region (Stateful)" Fixed="true" />
-              <CategoryReference Kind="Category" Name="Primitive" />
-              <Choice Kind="ProcessStatefulRegion" Name="Cache" />
+          <Node Bounds="419,404,65,26" Id="UqfnRw2NtklLTjqqACJfg6">
+            <p:NodeReference LastCategoryFullName="System.Drawing.Bitmap" LastDependency="VL.CoreLib.vl">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <CategoryReference Kind="ClassType" Name="Bitmap" />
+              <Choice Kind="OperationCallFlag" Name="ToImage" />
             </p:NodeReference>
-            <Pin Id="SIsvjhiaRjdPtmF8pu8SMe" Name="Force" Kind="InputPin" />
-            <Pin Id="P7PMVil34kcLfvyWnRzGpE" Name="Dispose Cached Outputs" Kind="InputPin" />
-            <Pin Id="AJCNHzhLGv2OOwhCOJIjfM" Name="Has Changed" Kind="OutputPin" />
-            <Patch Id="GH7iJW6K5bKOV6pLElGmNo" ManuallySortedPins="true">
-              <Patch Id="EMjiOYrVhqNO1IzGJQjkt6" Name="Create" ManuallySortedPins="true" />
-              <Patch Id="LmkTfAw9oNsMThVTeNUWvd" Name="Then" ManuallySortedPins="true" />
-              <Node Bounds="283,348,56,26" Id="KVfZVvVPngwLlsX21UoDT5">
-                <p:NodeReference LastCategoryFullName="IO.IDSPeak.ListDevices" LastDependency="VL.IDSPeak.vl">
-                  <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
-                  <CategoryReference Kind="ClassType" Name="ListDevices" />
-                  <Choice Kind="OperationCallFlag" Name="Update" />
-                </p:NodeReference>
-                <Pin Id="ApueO19LzhkPFMFyQD6kor" Name="Input" Kind="StateInputPin" />
-                <Pin Id="Dq9UsCAlMOfP6gNOTm5Zmz" Name="Update" Kind="InputPin" />
-                <Pin Id="Hu86ANseqOEMR9B1AWXC9j" Name="Output" Kind="StateOutputPin" />
-              </Node>
-            </Patch>
+            <Pin Id="CbxyYUP0n9TPSrdpxwdSkL" Name="Input" Kind="StateInputPin" />
+            <Pin Id="UT2nfsA57SDMZtc8rfa01P" Name="Take Ownership" Kind="InputPin" />
+            <Pin Id="OmcFnZi8mR2LDUwzIalaPU" Name="Is Volatile" Kind="InputPin" />
+            <Pin Id="TpEqX9ZvpBtLMiCkQIGMfy" Name="Can Write" Kind="InputPin" />
+            <Pin Id="TLzoau9bNBdLU6YzeW9v28" Name="Result" Kind="OutputPin" />
           </Node>
-          <Pad Id="F6p3MoXlGvANmzzJ73bDr3" Comment="Force" Bounds="315,286,35,15" ShowValueBox="true" isIOBox="true" Value="False">
-            <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
-              <Choice Kind="ImmutableTypeFlag" Name="Boolean" />
-            </p:TypeAnnotation>
-            <p:ValueBoxSettings>
-              <p:buttonmode p:Assembly="VL.UI.Forms" p:Type="VL.HDE.PatchEditor.Editors.ButtonModeEnum">Bang</p:buttonmode>
-            </p:ValueBoxSettings>
-          </Pad>
+          <Pad Id="Ez0M3n5tKhYPEHZe4EKZrZ" Comment="" Bounds="422,468,190,132" ShowValueBox="true" isIOBox="true" />
         </Canvas>
-        <Patch Id="LXunrCCTdysPcNciL4Upy1" Name="Create" ParticipatingElements="N6eQTYUHj9nPQhXfpL1jxL,QF3UsDg0BiLPTIk4cnkNwn" />
+        <Patch Id="LXunrCCTdysPcNciL4Upy1" Name="Create" />
         <Patch Id="QmZlxI5qG6lPoJhwioMVNy" Name="Update" />
         <ProcessDefinition Id="JfDTYn99I8YOM81n7WTERu">
           <Fragment Id="BEyEUiWZZ31Nk9lcc4XHBm" Patch="LXunrCCTdysPcNciL4Upy1" Enabled="true" />
           <Fragment Id="NPUfao2bI8XMogMZM7dBsS" Patch="QmZlxI5qG6lPoJhwioMVNy" Enabled="true" />
         </ProcessDefinition>
         <Slot Id="AMU6LsKVdbTLaul0lYkqkt" Name="List Devices" />
-        <Link Id="QF3UsDg0BiLPTIk4cnkNwn" Ids="LBPmsqoHTgvQKgyzMyAf50,At6qukMgdlcPOClje3hxcU" />
-        <Link Id="TAvbqD4Q8f6NqETX268hCi" Ids="At6qukMgdlcPOClje3hxcU,ApueO19LzhkPFMFyQD6kor" />
-        <Link Id="GWa6dCm6UelODR3k1TNDpZ" Ids="F6p3MoXlGvANmzzJ73bDr3,SIsvjhiaRjdPtmF8pu8SMe" />
+        <Link Id="JP5CUy1tddmMZ0qWcderAw" Ids="RFcoAx5yXpXOGviov1kUDc,CbxyYUP0n9TPSrdpxwdSkL" />
+        <Link Id="NBKGPHtd6O5P0lJgYLQtHC" Ids="TLzoau9bNBdLU6YzeW9v28,Ez0M3n5tKhYPEHZe4EKZrZ" />
       </Patch>
     </Node>
   </Patch>
