@@ -5,6 +5,7 @@ using peak;
 
 namespace IO.IDSPeak;
 
+[ProcessNode]
 public class ListDevices
 {
     private DeviceManager _deviceManager;
