@@ -5,22 +5,31 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using VL.Model;
 
 namespace VL.IDSPeak
 {
     [ProcessNode]
     public class VideoIn
     {
+        // Node context and logging
+        private readonly NodeContext _nodeContext;
+        private readonly ILogger _logger;
+
         private BackEnd backEnd { get; set; }
         public bool HasError { get; set; }
         public Bitmap bitmap { get; set; }
 
-        public VideoIn()
+        public VideoIn([Pin(Visibility = PinVisibility.Hidden)] NodeContext nodeContext)
         {
+
             try
             {
-                Console.WriteLine("Init");
-                backEnd = new BackEnd();
+                _nodeContext = nodeContext;
+                _logger = nodeContext.GetLogger();
+                _logger.Log(LogLevel.Debug, "VideoIn init");
+                backEnd = new BackEnd(nodeContext);
                 backEnd.ImageReceived += BackendImageReceived;
                 backEnd.CounterChanged += BackendCounterChanged;
                 backEnd.MessageBoxTrigger += BackendMessageBoxTrigger;

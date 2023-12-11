@@ -29,11 +29,17 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Drawing;
 using System.Diagnostics;
+using Microsoft.Extensions.Logging;
+using VL.Model;
 
 namespace VL.IDSPeak;
 
 public class BackEnd
 {
+    // Logging
+    private readonly NodeContext _nodeContext;
+    private readonly ILogger _logger;
+
     // Event which is raised if a new image was received
     public delegate void ImageReceivedEventHandler(object sender, Bitmap image);
     public event ImageReceivedEventHandler ImageReceived;
@@ -55,8 +61,12 @@ public class BackEnd
 
     private bool isActive;
 
-    public BackEnd()
+    public BackEnd(NodeContext nodeContext)
     {
+        _nodeContext = nodeContext;
+        _logger = nodeContext.GetLogger();
+
+        _logger.Log(LogLevel.Debug, "IDS Backend init");
         Console.WriteLine("--- [BackEnd] Init");
 
         isActive = true;
