@@ -21,16 +21,8 @@
  * General permission to copy or modify is hereby granted.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Drawing;
-using System.Diagnostics;
 using Microsoft.Extensions.Logging;
-using VL.Model;
 
 namespace VL.IDSPeak;
 
@@ -66,15 +58,14 @@ public class BackEnd
         _nodeContext = nodeContext;
         _logger = nodeContext.GetLogger();
 
-        _logger.Log(LogLevel.Debug, "IDS Backend init");
-        Console.WriteLine("--- [BackEnd] Init");
+        _logger.Log(LogLevel.Information, "IDSPeak Backend is initializing");
 
         isActive = true;
 
         try
         {
             // Create acquisition worker thread that waits for new images from the camera
-            acquisitionWorker = new AcquisitionWorker();
+            acquisitionWorker = new AcquisitionWorker(nodeContext   );
             acquisitionThread = new Thread(new ThreadStart(acquisitionWorker.Start));
 
             acquisitionWorker.ImageReceived += acquisitionWorker_ImageReceived;
@@ -83,16 +74,17 @@ public class BackEnd
 
             // Initialize peak library
             peak.Library.Initialize();
+            _logger.Log(LogLevel.Information, "IDSPeak Backend has created acquisition worker");
         }
         catch (Exception e)
         {
-            Console.WriteLine("--- [BackEnd] Exception: " + e.Message);
+            _logger.Log(message: "IDSPeak Backend threw an exception while creating acquisition worker", logLevel: LogLevel.Error, exception: e);
         }
     }
 
     public bool start()
     {
-        Console.WriteLine("--- [BackEnd] Start");
+        _logger.Log(LogLevel.Information, "IDSPeak Backend has started");
         if (!OpenDevice())
         {
             return false;
@@ -106,7 +98,6 @@ public class BackEnd
 
     public void Stop()
     {
-        Console.WriteLine("--- [BackEnd] Stop");
         isActive = false;
         acquisitionWorker.Stop();
 
@@ -119,11 +110,12 @@ public class BackEnd
 
         // Close peak library
         peak.Library.Close();
+        _logger.Log(LogLevel.Information, "IDSPeak Backend has stopped");
     }
 
     public bool OpenDevice()
     {
-        Console.WriteLine("--- [BackEnd] Open device");
+        _logger.Log(LogLevel.Information, "IDSPeak Backend is opening device");
         try
         {
             // Create instance of the device manager
@@ -135,14 +127,14 @@ public class BackEnd
             // Return if no device was found
             if (!deviceManager.Devices().Any())
             {
-                Console.WriteLine("--- [BackEnd] Error: No device found");
+                _logger.Log(LogLevel.Error, "IDS Backend could not find any device");
                 MessageBoxTrigger(this, "Error", "No device found");
                 return false;
             }
 
             // Open the first openable device in the device manager's device list
             var deviceCount = deviceManager.Devices().Count();
-            Console.WriteLine("--- [BackEnd] Found " + deviceCount + " device(s)");
+            _logger.Log(LogLevel.Information, "IDS Backend found {devicecount} device(s)", args:deviceCount);
 
             for (var i = 0; i < deviceCount; ++i)
             {
@@ -155,7 +147,7 @@ public class BackEnd
                 }
                 else if (i == deviceCount - 1)
                 {
-                    Console.WriteLine("--- [BackEnd] Error: Device could not be openend");
+                    _logger.Log(LogLevel.Error, "IDS Backend could not open device it had found");
                     MessageBoxTrigger(this, "Error", "Device could not be openend");
                     return false;
                 }
@@ -168,7 +160,7 @@ public class BackEnd
 
                 if (!dataStreams.Any())
                 {
-                    Console.WriteLine("--- [BackEnd] Error: Device has no DataStream");
+                    _logger.Log(LogLevel.Error, "IDS Backend sees no DataStream in device");
                     MessageBoxTrigger(this, "Error", "Device has no DataStream");
                     return false;
                 }
@@ -180,7 +172,7 @@ public class BackEnd
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("--- [BackEnd] Error: Failed to open DataStream");
+                    _logger.Log(message: "IDSPeak Backend has failed to open data stream", exception: e, logLevel: LogLevel.Error);
                     MessageBoxTrigger(this, "Error", "Failed to open DataStream\n" + e.Message);
                     return false;
                 }
@@ -221,7 +213,7 @@ public class BackEnd
         }
         catch (Exception e)
         {
-            Console.WriteLine("--- [BackEnd] Exception: " + e.Message);
+            _logger.Log(message: "IDSPeak Backend has raised an exception", exception: e, logLevel: LogLevel.Error);
             MessageBoxTrigger(this, "Exception", e.Message);
             return false;
         }
@@ -231,7 +223,7 @@ public class BackEnd
 
     public void CloseDevice()
     {
-        Console.WriteLine("--- [BackEnd] Close device");
+        _logger.Log(LogLevel.Information, "IDSPeak Backend is closing the device");
         // If device was opened, try to stop acquisition
         if (device != null)
         {
@@ -243,7 +235,7 @@ public class BackEnd
             }
             catch (Exception e)
             {
-                Console.WriteLine("--- [BackEnd] Exception: " + e.Message);
+                _logger.Log(message: "IDSPeak Backend raised an exception while trying to close the device", exception: e, logLevel: LogLevel.Error);
                 MessageBoxTrigger(this, "Exception", e.Message);
             }
         }
@@ -264,7 +256,7 @@ public class BackEnd
             }
             catch (Exception e)
             {
-                Console.WriteLine("--- [BackEnd] Exception: " + e.Message);
+                _logger.Log(message: "IDSPeak Backend has raised an exception", exception: e, logLevel: LogLevel.Error);
                 MessageBoxTrigger(this, "Exception", e.Message);
             }
         }
@@ -276,7 +268,7 @@ public class BackEnd
         }
         catch (Exception e)
         {
-            Console.WriteLine("--- [BackEnd] Exception: " + e.Message);
+            _logger.Log(message: "IDSPeak Backend has raised an exception", exception: e, logLevel: LogLevel.Error);
             MessageBoxTrigger(this, "Exception", e.Message);
         }
     }

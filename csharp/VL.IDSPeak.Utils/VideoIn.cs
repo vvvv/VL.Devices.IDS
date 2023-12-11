@@ -18,8 +18,11 @@ namespace VL.IDSPeak
         private readonly ILogger _logger;
 
         private BackEnd backEnd { get; set; }
-        public bool HasError { get; set; }
-        public Bitmap bitmap { get; set; }
+
+        private bool HasError { get; set; }
+        private Bitmap Bitmap { get; set; }
+        private string Status { get; set; }
+        private int FrameCounter { get; set; }
 
         public VideoIn([Pin(Visibility = PinVisibility.Hidden)] NodeContext nodeContext)
         {
@@ -28,7 +31,8 @@ namespace VL.IDSPeak
             {
                 _nodeContext = nodeContext;
                 _logger = nodeContext.GetLogger();
-                _logger.Log(LogLevel.Debug, "VideoIn init");
+                _logger.Log(LogLevel.Information, "IDSPeak VideoIn is initializing");
+
                 backEnd = new BackEnd(nodeContext);
                 backEnd.ImageReceived += BackendImageReceived;
                 backEnd.CounterChanged += BackendCounterChanged;
@@ -36,35 +40,50 @@ namespace VL.IDSPeak
 
                 if (backEnd.start())
                 {
-                    Console.WriteLine("All good");
                     HasError = false;
+                    _logger.Log(LogLevel.Information, "IDS Backend has started");
                 }
                 else
                 {
-                    Console.WriteLine("Grrrrr");
                     HasError = true;
+                    _logger.Log(LogLevel.Error, "IDS Backend could not start");
                 }
             }
             catch (Exception e)
             {
-                Debug.WriteLine("--- [FormWindow] Exception: " + e.Message);
+                _logger.Log(message:"Exception caught while initializing IDS Camera", logLevel: LogLevel.Error, exception: e);
                 BackendMessageBoxTrigger(this, "Exception", e.Message);
             }
         }
 
         private void BackendImageReceived(object sender, Bitmap image) 
         {
-            Console.WriteLine("I have received something bro");
-            bitmap = image;
+            Bitmap = image;
         }
 
-        private void BackendCounterChanged(object sender, uint frameCounter, uint errorCounter) { }
-
-        private void BackendMessageBoxTrigger(object sender, string messageTitle, string messageText) { }
-
-        public Bitmap Update() 
+        private void BackendCounterChanged(object sender, uint frameCounter, uint errorCounter) 
         {
-            return bitmap;
+            FrameCounter = (int)frameCounter;
+        }
+
+        private void BackendMessageBoxTrigger(object sender, string messageTitle, string messageText) 
+        {
+            Status = messageText;
+        }
+
+        public Bitmap Update(out int FrameCounter, out string Status) 
+        {
+            FrameCounter = this.FrameCounter;
+            Status = this.Status;
+            return Bitmap;
+        }
+
+        public void Dispose()
+        {
+            _logger.Log(LogLevel.Information, "IDSPeak VideoIn node is disposing...");
+            backEnd.ImageReceived -= BackendImageReceived;
+            backEnd.CounterChanged -= BackendCounterChanged;
+            backEnd.MessageBoxTrigger -= BackendMessageBoxTrigger;
         }
     }
 }

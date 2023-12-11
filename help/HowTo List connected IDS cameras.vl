@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Document xmlns:p="property" xmlns:r="reflection" Id="Pgm1kAJUKLINfqGxTxoqce" LanguageVersion="2023.5.3-0368-g2897901e27" Version="0.128">
-  <NugetDependency Id="Q9Tj6aKzwwmMGVbSNKzOPX" Location="VL.CoreLib" Version="2023.5.3-0368-g2897901e27" />
+<Document xmlns:p="property" xmlns:r="reflection" Id="Pgm1kAJUKLINfqGxTxoqce" LanguageVersion="2023.5.3-0380-g4d7f3342a6" Version="0.128">
+  <NugetDependency Id="Q9Tj6aKzwwmMGVbSNKzOPX" Location="VL.CoreLib" Version="2023.5.3-0380-g4d7f3342a6" />
   <Patch Id="HqNcRBC9fevQLOlWrMJebq">
     <Canvas Id="VVWL1exehLANYBjl42Upnf" DefaultCategory="Main" BordersChecked="false" CanvasType="FullCategory" />
     <!--
@@ -15,14 +15,15 @@
       </p:NodeReference>
       <Patch Id="DuXhi9OArWAOc6GNXZpqmb">
         <Canvas Id="BwazeuqC1CmMEgL6EpXBPO" CanvasType="Group">
-          <Node Bounds="408,349,51,19" Id="GQDkh0DoY6oOxS1LF7ttzx">
+          <Node Bounds="376,298,51,19" Id="GQDkh0DoY6oOxS1LF7ttzx">
             <p:NodeReference LastCategoryFullName="VL.IDSPeak" LastDependency="VL.IDSPeak.vl">
               <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
               <Choice Kind="ProcessAppFlag" Name="VideoIn" />
             </p:NodeReference>
-            <Pin Id="RCMwOaPuIBlQHWm3ljz43m" Name="Has Error" Kind="InputPin" />
-            <Pin Id="BbnjDwv9OXuMlasBqjYcss" Name="Bitmap" Kind="InputPin" />
+            <Pin Id="TlbCUQxg6qcPI8unK3nRUU" Name="Node Context" Kind="InputPin" IsHidden="true" />
             <Pin Id="RFcoAx5yXpXOGviov1kUDc" Name="Result" Kind="OutputPin" />
+            <Pin Id="UMoMV4a0Q0xPTzOJ4wwVAA" Name="Frame Counter" Kind="OutputPin" />
+            <Pin Id="TJP8begbjrxQFdpM7mSIlG" Name="Status" Kind="OutputPin" />
           </Node>
           <Node Bounds="419,404,65,26" Id="UqfnRw2NtklLTjqqACJfg6">
             <p:NodeReference LastCategoryFullName="System.Drawing.Bitmap" LastDependency="VL.CoreLib.vl">
@@ -36,7 +37,9 @@
             <Pin Id="TpEqX9ZvpBtLMiCkQIGMfy" Name="Can Write" Kind="InputPin" />
             <Pin Id="TLzoau9bNBdLU6YzeW9v28" Name="Result" Kind="OutputPin" />
           </Node>
-          <Pad Id="Ez0M3n5tKhYPEHZe4EKZrZ" Comment="" Bounds="422,468,190,132" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="Ez0M3n5tKhYPEHZe4EKZrZ" Comment="" Bounds="421,474,190,132" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="GI5jrG92SmwPcThGu0Anzk" Comment="Frame Counter" Bounds="473,377,35,15" ShowValueBox="true" isIOBox="true" />
+          <Pad Id="Jw3YQMo4dv2Pubh7r9lXKo" Comment="Status" Bounds="484,353,140,15" ShowValueBox="true" isIOBox="true" />
         </Canvas>
         <Patch Id="LXunrCCTdysPcNciL4Upy1" Name="Create" />
         <Patch Id="QmZlxI5qG6lPoJhwioMVNy" Name="Update" />
@@ -47,6 +50,8 @@
         <Slot Id="AMU6LsKVdbTLaul0lYkqkt" Name="List Devices" />
         <Link Id="JP5CUy1tddmMZ0qWcderAw" Ids="RFcoAx5yXpXOGviov1kUDc,CbxyYUP0n9TPSrdpxwdSkL" />
         <Link Id="NBKGPHtd6O5P0lJgYLQtHC" Ids="TLzoau9bNBdLU6YzeW9v28,Ez0M3n5tKhYPEHZe4EKZrZ" />
+        <Link Id="IfLT9995JQYL2P2sHdGr2V" Ids="UMoMV4a0Q0xPTzOJ4wwVAA,GI5jrG92SmwPcThGu0Anzk" />
+        <Link Id="QKLKNIMJSqaMtEB8YtqAm6" Ids="TJP8begbjrxQFdpM7mSIlG,Jw3YQMo4dv2Pubh7r9lXKo" />
       </Patch>
     </Node>
   </Patch>

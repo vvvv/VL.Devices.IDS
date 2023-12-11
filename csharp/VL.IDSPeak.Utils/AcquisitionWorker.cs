@@ -31,6 +31,9 @@ using peak;
 using peak.core;
 using peak.core.nodes;
 using System.Security.Cryptography;
+using Microsoft.Extensions.Logging;
+using VL.Core;
+using Microsoft.Extensions.Logging;
 
 namespace VL.IDSPeak
 {
@@ -55,9 +58,15 @@ namespace VL.IDSPeak
         private uint frameCounter;
         private uint errorCounter;
 
-        public AcquisitionWorker()
+        private readonly NodeContext _nodeContext;
+        private readonly ILogger _logger;
+
+        public AcquisitionWorker(NodeContext nodeContext)
         {
-            Debug.WriteLine("--- [AcquisitionWorker] Init");
+            _nodeContext = nodeContext;
+            _logger = nodeContext.GetLogger();
+
+            _logger.Log(LogLevel.Information, "IDSPeak Acquisition worker is initializing");
             running = false;
             frameCounter = 0;
             errorCounter = 0;
@@ -65,7 +74,7 @@ namespace VL.IDSPeak
 
         public void Start()
         {
-            Debug.WriteLine("--- [AcquisitionWorker] Start Acquisition");
+            _logger.Log(LogLevel.Information, "IDSPeak Acquisition worker is starting");
             try
             {
                 // Lock critical features to prevent them from changing during acquisition
@@ -78,7 +87,7 @@ namespace VL.IDSPeak
             }
             catch (Exception e)
             {
-                Debug.WriteLine("--- [AcquisitionWorker] Exception: " + e.Message);
+                _logger.Log(message: "IDSPeak Acquisition worker threw an exception while start", logLevel: LogLevel.Error, exception: e);
                 MessageBoxTrigger(this, "Exception", e.Message);
             }
 
@@ -120,7 +129,6 @@ namespace VL.IDSPeak
 
                     if (ImageReceived != null)
                     {
-                        Debug.WriteLine("--- [AcquisitionWorker] Send image Nr. " + (frameCounter + 1));
                         ImageReceived(this, imageCopy);
                     }
 
@@ -129,7 +137,7 @@ namespace VL.IDSPeak
                 catch (Exception e)
                 {
                     errorCounter++;
-                    Debug.WriteLine("--- [AcquisitionWorker] Exception: " + e.Message);
+                    _logger.Log(message: "IDSPeak Acquisition worker threw an exception while acquiring a frame", logLevel: LogLevel.Error, exception: e);
                     MessageBoxTrigger(this, "Exception", e.Message);
                 }
 
@@ -140,19 +148,17 @@ namespace VL.IDSPeak
 
         public void Stop()
         {
-            Debug.WriteLine("--- [AcquisitionWorker] Stop Acquisition");
+            _logger.Log(LogLevel.Information, "IDSPeak Acquisition worker is stopping");
             running = false;
         }
 
         public void SetDataStream(peak.core.DataStream dataStream)
         {
-            Debug.WriteLine("--- [AcquisitionWorker] Set dataStream");
             this.dataStream = dataStream;
         }
 
         public void SetNodemapRemoteDevice(peak.core.NodeMap nodeMap)
         {
-            Debug.WriteLine("--- [AcquisitionWorker] Set nodeMap");
             nodeMapRemoteDevice = nodeMap;
         }
     }
