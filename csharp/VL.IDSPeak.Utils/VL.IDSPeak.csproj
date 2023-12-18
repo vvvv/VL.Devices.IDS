@@ -6,6 +6,10 @@
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <OutputPath>..\..\lib</OutputPath>
+
+    <VVVVInstallPath>C:\Program Files\vvvv\vvvv_gamma_5.3-0377-g503e8c1059</VVVVInstallPath>
+    <RepoRootPath>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..'))</RepoRootPath>
+    <VVVVRepoPath>$([System.IO.Path]::GetFullPath('$(RepoRootPath)\..'))</VVVVRepoPath>
   </PropertyGroup>
 
   <ItemGroup>
