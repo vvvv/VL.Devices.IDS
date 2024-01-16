@@ -32,22 +32,21 @@ public class IDSDevice : DynamicEnumBase<IDSDevice, IDSDeviceDefinition>
 
 public class IDSDeviceDefinition : DynamicEnumDefinitionBase<IDSDeviceDefinition>
 {
-    private DeviceManager _deviceManager;
-
-    public IDSDeviceDefinition()
-    {
-        peak.Library.Initialize();
-        _deviceManager = peak.DeviceManager.Instance();
-    }
+    private IDisposable? _idsPeakLibrary;
 
     //Return the current enum entries
     protected override IReadOnlyDictionary<string, object> GetEntries()
     {
-        _deviceManager.Update();
+        // TODO: Review this line - we might want to kill the lib immediately because lifetime tied to dev session is stupid and leads to crash on shutdown
+        if (_idsPeakLibrary is null)
+            _idsPeakLibrary = IdsPeakLibrary.Use().DisposeBy(AppHost.Global);
+
+        var deviceManager = DeviceManager.Instance();
+        deviceManager.Update();
 
         var devices = new Dictionary<string, object>();
         
-        foreach(var device in _deviceManager.Devices())
+        foreach(var device in deviceManager.Devices())
         {
             var name = device.DisplayName();
             if(!devices.ContainsKey(name))
@@ -65,7 +64,7 @@ public class IDSDeviceDefinition : DynamicEnumDefinitionBase<IDSDeviceDefinition
         // These two events seem to be interesting but I can't figure out how to make them trigger this function
         // _deviceManager.DeviceFoundEvent
         //_deviceManager.DeviceLostEvent
-        return null;
+        return Observable.Empty<object>();
     }
 
     //Optionally disable alphabetic sorting

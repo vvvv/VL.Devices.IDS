@@ -58,13 +58,11 @@ namespace VL.IDSPeak
         private uint frameCounter;
         private uint errorCounter;
 
-        private readonly NodeContext _nodeContext;
         private readonly ILogger _logger;
 
-        public AcquisitionWorker(NodeContext nodeContext)
+        public AcquisitionWorker(ILogger logger)
         {
-            _nodeContext = nodeContext;
-            _logger = nodeContext.GetLogger();
+            _logger = logger;
 
             _logger.Log(LogLevel.Information, "IDSPeak Acquisition worker is initializing");
             running = false;
@@ -98,39 +96,42 @@ namespace VL.IDSPeak
                 try
                 {
                     // Get buffer from device's datastream
-                    var buffer = dataStream.WaitForFinishedBuffer(1000);
+                    var x = dataStream.NumBuffersAnnounced();
+
+                    GC.Collect();
+                    //var buffer = dataStream.WaitForFinishedBuffer(1000);
 
                     // Create IDS peak IPL
-                    var iplImg = new peak.ipl.Image((peak.ipl.PixelFormatName)buffer.PixelFormat(), buffer.BasePtr(),
-                        buffer.Size(), buffer.Width(), buffer.Height());
+                    //using var iplImg = new peak.ipl.Image((peak.ipl.PixelFormatName)buffer.PixelFormat(), buffer.BasePtr(),
+                    //    buffer.Size(), buffer.Width(), buffer.Height());
 
-                    // Debayering and convert IDS peak IPL Image to RGB8 format
-                    iplImg = iplImg.ConvertTo(peak.ipl.PixelFormatName.BGRa8);
+                    //// Debayering and convert IDS peak IPL Image to RGB8 format
+                    //iplImg = iplImg.ConvertTo(peak.ipl.PixelFormatName.BGRa8);
 
-                    var width = Convert.ToInt32(iplImg.Width());
-                    var height = Convert.ToInt32(iplImg.Height());
-                    var stride = Convert.ToInt32(iplImg.PixelFormat().CalculateStorageSizeOfPixels(iplImg.Width()));
+                    //var width = Convert.ToInt32(iplImg.Width());
+                    //var height = Convert.ToInt32(iplImg.Height());
+                    //var stride = Convert.ToInt32(iplImg.PixelFormat().CalculateStorageSizeOfPixels(iplImg.Width()));
 
-                    // Queue buffer so that it can be used again 
-                    dataStream.QueueBuffer(buffer);
+                    //// Queue buffer so that it can be used again 
+                    //dataStream.QueueBuffer(buffer);
 
-                    var data = iplImg.Data();
+                    //var data = iplImg.Data();
 
-                    var image = new Bitmap(width, height, stride,
-                        System.Drawing.Imaging.PixelFormat.Format32bppRgb, data);
+                    //var image = new Bitmap(width, height, stride,
+                    //    System.Drawing.Imaging.PixelFormat.Format32bppRgb, data);
 
-                    // Create a deep copy of the Bitmap, so it doesn't use memory of the IDS peak IPL Image.
-                    // Warning: Don't use image.Clone(), because it only creates a shallow copy!
-                    var imageCopy = new Bitmap(image);
+                    //// Create a deep copy of the Bitmap, so it doesn't use memory of the IDS peak IPL Image.
+                    //// Warning: Don't use image.Clone(), because it only creates a shallow copy!
+                    //var imageCopy = new Bitmap(image);
 
-                    // The other images are not needed anymore.
-                    image.Dispose();
-                    iplImg.Dispose();
+                    //// The other images are not needed anymore.
+                    //image.Dispose();
+                    //iplImg.Dispose();
 
-                    if (ImageReceived != null)
-                    {
-                        ImageReceived(this, imageCopy);
-                    }
+                    //if (ImageReceived != null)
+                    //{
+                    //    ImageReceived(this, imageCopy);
+                    //}
 
                     frameCounter++;
                 }

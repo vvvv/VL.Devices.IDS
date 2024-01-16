@@ -6,84 +6,65 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using peak.core;
+using VL.Lib.Basics.Video;
 using VL.Model;
 
 namespace VL.IDSPeak
 {
     [ProcessNode]
-    public class VideoIn
+    public class VideoIn : IVideoSource2
     {
         // Node context and logging
-        private readonly NodeContext _nodeContext;
         private readonly ILogger _logger;
 
-        private BackEnd backEnd { get; set; }
-
-        private bool HasError { get; set; }
-        private Bitmap Bitmap { get; set; }
-        private string Status { get; set; }
-        private int FrameCounter { get; set; }
+        private int _changedTicket;
+        private IDSDevice? _device;
+        private Connection? _currentConnection;
 
         public VideoIn([Pin(Visibility = PinVisibility.Hidden)] NodeContext nodeContext)
         {
+            _logger = nodeContext.GetLogger();
+        }
+
+        [return: Pin(Name = "Output")]
+        public IVideoSource Update(IDSDevice? device)
+        {
+            if (device != _device)
+            {
+                _device = device;
+                _changedTicket++;
+            }
+
+            return this;
+        }
+
+        IVideoPlayer? IVideoSource2.Start(VideoPlaybackContext ctx)
+        {
+            if (_device is null)
+                return null;
+
+            var deviceDescriptor = _device.Tag as DeviceDescriptor;
+            if (deviceDescriptor is null)
+                return null;
+
+            if (_currentConnection != null)
+            {
+                _currentConnection.IsDisposed.WaitOne(1000);
+                _currentConnection = null;
+            }
 
             try
             {
-                _nodeContext = nodeContext;
-                _logger = nodeContext.GetLogger();
-                _logger.Log(LogLevel.Information, "IDSPeak VideoIn is initializing");
-
-                backEnd = new BackEnd(nodeContext);
-                backEnd.ImageReceived += BackendImageReceived;
-                backEnd.CounterChanged += BackendCounterChanged;
-                backEnd.MessageBoxTrigger += BackendMessageBoxTrigger;
-
-                if (backEnd.start())
-                {
-                    HasError = false;
-                    _logger.Log(LogLevel.Information, "IDS Backend has started");
-                }
-                else
-                {
-                    HasError = true;
-                    _logger.Log(LogLevel.Error, "IDS Backend could not start");
-                }
+                return _currentConnection = Connection.Start(deviceDescriptor, _logger);
             }
             catch (Exception e)
             {
-                _logger.Log(message:"Exception caught while initializing IDS Camera", logLevel: LogLevel.Error, exception: e);
-                BackendMessageBoxTrigger(this, "Exception", e.Message);
+                _logger.LogError(e, "Failed to start image acquisition");
+                return null;
             }
         }
 
-        private void BackendImageReceived(object sender, Bitmap image) 
-        {
-            Bitmap = image;
-        }
-
-        private void BackendCounterChanged(object sender, uint frameCounter, uint errorCounter) 
-        {
-            FrameCounter = (int)frameCounter;
-        }
-
-        private void BackendMessageBoxTrigger(object sender, string messageTitle, string messageText) 
-        {
-            Status = messageText;
-        }
-
-        public Bitmap Update(out int FrameCounter, out string Status) 
-        {
-            FrameCounter = this.FrameCounter;
-            Status = this.Status;
-            return Bitmap;
-        }
-
-        public void Dispose()
-        {
-            _logger.Log(LogLevel.Information, "IDSPeak VideoIn node is disposing...");
-            backEnd.ImageReceived -= BackendImageReceived;
-            backEnd.CounterChanged -= BackendCounterChanged;
-            backEnd.MessageBoxTrigger -= BackendMessageBoxTrigger;
-        }
+        int IVideoSource2.ChangedTicket => _changedTicket;
     }
 }

@@ -53,10 +53,9 @@ public class BackEnd
 
     private bool isActive;
 
-    public BackEnd(NodeContext nodeContext)
+    public BackEnd(ILogger logger)
     {
-        _nodeContext = nodeContext;
-        _logger = nodeContext.GetLogger();
+        _logger = logger;
 
         _logger.Log(LogLevel.Information, "IDSPeak Backend is initializing");
 
@@ -65,7 +64,7 @@ public class BackEnd
         try
         {
             // Create acquisition worker thread that waits for new images from the camera
-            acquisitionWorker = new AcquisitionWorker(nodeContext   );
+            acquisitionWorker = new AcquisitionWorker(logger);
             acquisitionThread = new Thread(new ThreadStart(acquisitionWorker.Start));
 
             acquisitionWorker.ImageReceived += acquisitionWorker_ImageReceived;
@@ -285,7 +284,7 @@ public class BackEnd
 
     private void acquisitionWorker_MessageBoxTrigger(object sender, string messageTitle, string messageText)
     {
-        MessageBoxTrigger(sender, messageTitle, messageText);
+        MessageBoxTrigger?.Invoke(sender, messageTitle, messageText);
     }
 
     public bool IsActive()
