@@ -20,7 +20,7 @@ namespace VL.IDSPeak
         private readonly IDisposable _idsPeakLibSubscription;
 
         private int _changedTicket;
-        private IDSDevice? _device;
+        private DeviceDescriptor? _device;
 
         public VideoIn([Pin(Visibility = PinVisibility.Hidden)] NodeContext nodeContext)
         {
@@ -31,9 +31,10 @@ namespace VL.IDSPeak
         [return: Pin(Name = "Output")]
         public IVideoSource Update(IDSDevice? device)
         {
-            if (device != _device)
+            // By comparing the descriptor we can be sure that on re-connect of the device we see the change
+            if (device?.Tag != _device)
             {
-                _device = device;
+                _device = device?.Tag as DeviceDescriptor;
                 _changedTicket++;
             }
 
@@ -42,13 +43,13 @@ namespace VL.IDSPeak
 
         IVideoPlayer? IVideoSource2.Start(VideoPlaybackContext ctx)
         {
-            var deviceDescriptor = _device?.Tag as DeviceDescriptor;
-            if (deviceDescriptor is null)
+            var device = _device;
+            if (device is null)
                 return null;
 
             try
             {
-                return Acquisition.Start(deviceDescriptor, _logger);
+                return Acquisition.Start(device, _logger);
             }
             catch (Exception e)
             {

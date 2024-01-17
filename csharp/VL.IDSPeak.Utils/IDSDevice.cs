@@ -13,6 +13,7 @@ using VL.Lib;
 
 using peak;
 using peak.core;
+using System.Reactive.Disposables;
 
 namespace VL.IDSPeak;
 
@@ -39,7 +40,9 @@ public class IDSDeviceDefinition : DynamicEnumDefinitionBase<IDSDeviceDefinition
         try
         {
             _idsPeakLibrary = IdsPeakLibrary.Use().DisposeBy(AppHost.Global);
-            DeviceManager.Instance().Update();
+
+            var deviceManager = DeviceManager.Instance();
+            deviceManager.Update();
         }
         catch
         {
@@ -85,11 +88,27 @@ public class IDSDeviceDefinition : DynamicEnumDefinitionBase<IDSDeviceDefinition
         if (_idsPeakLibrary is null)
             return Observable.Empty<object>();
 
-        var deviceManager = DeviceManager.Instance();
+        return Observable.Using(
+            resourceFactory: () =>
+            {
+                if (OperatingSystem.IsWindows())
+                    return HardwareChangedEvents.HardwareChanged
+                        .Subscribe(_ =>
+                        {
+                            var deviceManager = DeviceManager.Instance();
+                            deviceManager.Update();
+                        });
+                else
+                    return Disposable.Empty;
+            },
+            observableFactory: _ =>
+            {
+                var deviceManager = DeviceManager.Instance();
 
-        return Observable.Merge<object>(
-            Observable.FromEventPattern<DeviceDescriptor>(deviceManager, nameof(deviceManager.DeviceFoundEvent)),
-            Observable.FromEventPattern<string>(deviceManager, nameof(deviceManager.DeviceLostEvent)));
+                return Observable.Merge<object>(
+                    Observable.FromEventPattern<DeviceDescriptor>(deviceManager, nameof(deviceManager.DeviceFoundEvent)),
+                    Observable.FromEventPattern<string>(deviceManager, nameof(deviceManager.DeviceLostEvent)));
+            });
     }
 
     //Optionally disable alphabetic sorting

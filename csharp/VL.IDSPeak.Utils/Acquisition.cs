@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.HighPerformance;
 using Microsoft.Extensions.Logging;
 using peak.core;
+using peak.core.nodes;
 using peak.ipl;
 using VL.Lib.Basics.Resources;
 using VL.Lib.Basics.Video;
@@ -150,45 +151,38 @@ namespace VL.IDSPeak
 
         public unsafe IResourceProvider<VideoFrame>? GrabVideoFrame()
         {
-            try
+            using var buffer = _dataStream.WaitForFinishedBuffer(100);
+
+            if (!buffer.HasNewData() || buffer.IsIncomplete())
             {
-                using var buffer = _dataStream.WaitForFinishedBuffer(100);
-
-                if (!buffer.HasNewData() || buffer.IsIncomplete())
-                {
-                    _dataStream.QueueBuffer(buffer);
-                    return null;
-                }
-
-                // Create IDS peak IPL
-                using var bayerImage = new peak.ipl.Image((peak.ipl.PixelFormatName)buffer.PixelFormat(), buffer.BasePtr(),
-                    buffer.Size(), buffer.Width(), buffer.Height());
-
-                // Debayering and convert IDS peak IPL Image to RGB8 format
-                var bgraImage = _imageConverter.Convert(bayerImage, PixelFormat);
-
-                var width = (int)bgraImage.Width();
-                var height = (int)bgraImage.Height();
-                var stride = (int)bgraImage.PixelFormat().CalculateStorageSizeOfPixels((uint)width);
-
-                // Queue buffer so that it can be used again 
                 _dataStream.QueueBuffer(buffer);
-
-                var memoryOwner = new UnmanagedMemoryManager<BgraPixel>(bgraImage.Data(), stride * height);
-                var pitch = stride - width * sizeof(BgraPixel);
-                var memory = memoryOwner.Memory.AsMemory2D(0, height, width, pitch);
-                var videoFrame = new VideoFrame<BgraPixel>(memory);
-                return ResourceProvider.Return(videoFrame, (memoryOwner, bgraImage),
-                    static x =>
-                    {
-                        ((IDisposable)x.memoryOwner).Dispose();
-                        x.bgraImage.Dispose();
-                    });
-            }
-            catch (Exception e)
-            {
                 return null;
             }
+
+            // Create IDS peak IPL
+            using var bayerImage = new peak.ipl.Image((peak.ipl.PixelFormatName)buffer.PixelFormat(), buffer.BasePtr(),
+                buffer.Size(), buffer.Width(), buffer.Height());
+
+            // Debayering and convert IDS peak IPL Image to RGB8 format
+            var bgraImage = _imageConverter.Convert(bayerImage, PixelFormat);
+
+            var width = (int)bgraImage.Width();
+            var height = (int)bgraImage.Height();
+            var stride = (int)bgraImage.PixelFormat().CalculateStorageSizeOfPixels((uint)width);
+
+            // Queue buffer so that it can be used again 
+            _dataStream.QueueBuffer(buffer);
+
+            var memoryOwner = new UnmanagedMemoryManager<BgraPixel>(bgraImage.Data(), stride * height);
+            var pitch = stride - width * sizeof(BgraPixel);
+            var memory = memoryOwner.Memory.AsMemory2D(0, height, width, pitch);
+            var videoFrame = new VideoFrame<BgraPixel>(memory);
+            return ResourceProvider.Return(videoFrame, (memoryOwner, bgraImage),
+                static x =>
+                {
+                    ((IDisposable)x.memoryOwner).Dispose();
+                    x.bgraImage.Dispose();
+                });
         }
     }
 }
