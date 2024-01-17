@@ -34,17 +34,38 @@ public class IDSDeviceDefinition : DynamicEnumDefinitionBase<IDSDeviceDefinition
 {
     private IDisposable? _idsPeakLibrary;
 
+    protected override void Initialize()
+    {
+        try
+        {
+            _idsPeakLibrary = IdsPeakLibrary.Use().DisposeBy(AppHost.Global);
+            DeviceManager.Instance().Update();
+        }
+        catch
+        {
+
+        }
+
+        base.Initialize();
+    }
+
     //Return the current enum entries
     protected override IReadOnlyDictionary<string, object> GetEntries()
     {
-        // TODO: Review this line - we might want to kill the lib immediately because lifetime tied to dev session is stupid and leads to crash on shutdown
         if (_idsPeakLibrary is null)
-            _idsPeakLibrary = IdsPeakLibrary.Use().DisposeBy(AppHost.Global);
+        {
+            return new Dictionary<string, object>()
+            {
+                { "Default", null! }
+            };
+        }
 
         var deviceManager = DeviceManager.Instance();
-        deviceManager.Update();
 
-        var devices = new Dictionary<string, object>();
+        var devices = new Dictionary<string, object>()
+        {
+            { "Default", deviceManager.Devices().FirstOrDefault()! }
+        };
         
         foreach(var device in deviceManager.Devices())
         {
@@ -61,10 +82,14 @@ public class IDSDeviceDefinition : DynamicEnumDefinitionBase<IDSDeviceDefinition
     //Optionally trigger a change of your enum. This will in turn call GetEntries() again
     protected override IObservable<object> GetEntriesChangedObservable()
     {
-        // These two events seem to be interesting but I can't figure out how to make them trigger this function
-        // _deviceManager.DeviceFoundEvent
-        //_deviceManager.DeviceLostEvent
-        return Observable.Empty<object>();
+        if (_idsPeakLibrary is null)
+            return Observable.Empty<object>();
+
+        var deviceManager = DeviceManager.Instance();
+
+        return Observable.Merge<object>(
+            Observable.FromEventPattern<DeviceDescriptor>(deviceManager, nameof(deviceManager.DeviceFoundEvent)),
+            Observable.FromEventPattern<string>(deviceManager, nameof(deviceManager.DeviceLostEvent)));
     }
 
     //Optionally disable alphabetic sorting

@@ -8,9 +8,9 @@ using Buffer = peak.core.Buffer;
 
 namespace VL.IDSPeak
 {
-    internal class Connection : IVideoPlayer
+    internal class Acquisition : IVideoPlayer
     {
-        public static Connection? Start(DeviceDescriptor deviceDescriptor, ILogger logger)
+        public static Acquisition? Start(DeviceDescriptor deviceDescriptor, ILogger logger)
         {
             logger.Log(LogLevel.Information, "Starting image acquisition on {device}", deviceDescriptor.DisplayName());
 
@@ -78,25 +78,25 @@ namespace VL.IDSPeak
             nodeMapRemoteDevice.FindNode<peak.core.nodes.CommandNode>("AcquisitionStart").Execute();
             nodeMapRemoteDevice.FindNode<peak.core.nodes.CommandNode>("AcquisitionStart").WaitUntilDone();
 
-            return new Connection(logger, device, dataStream, nodeMapRemoteDevice);
+            return new Acquisition(logger, device, dataStream, nodeMapRemoteDevice);
         }
 
+        private readonly IDisposable _idsPeakLibSubscription;
         private readonly ILogger _logger;
         private readonly Device _device; // DO NOT DELETE ME! Otherwise the finalizer will kill the whole graph!
         private readonly DataStream _dataStream;
         private readonly NodeMap _nodeMapRemoteDevice;
         private readonly ImageConverter _imageConverter;
 
-        public Connection(ILogger logger, Device device, DataStream dataStream, NodeMap nodeMapRemoteDevice)
+        public Acquisition(ILogger logger, Device device, DataStream dataStream, NodeMap nodeMapRemoteDevice)
         {
+            _idsPeakLibSubscription = IdsPeakLibrary.Use();
             _logger = logger;
             _device = device;
             _dataStream = dataStream;
             _nodeMapRemoteDevice = nodeMapRemoteDevice;
             _imageConverter = new ImageConverter();
         }
-
-        public ManualResetEvent IsDisposed { get; } = new ManualResetEvent(false);
 
         public PixelFormat PixelFormat { get; set; } = new PixelFormat(PixelFormatName.BGRa8);
 
@@ -145,8 +145,7 @@ namespace VL.IDSPeak
 
             _imageConverter.Dispose();
             _device.Dispose();
-
-            IsDisposed.Set();
+            _idsPeakLibSubscription.Dispose();
         }
 
         public unsafe IResourceProvider<VideoFrame>? GrabVideoFrame()

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using peak;
 using peak.core;
 using VL.Lib.Basics.Video;
 using VL.Model;
@@ -13,18 +14,18 @@ using VL.Model;
 namespace VL.IDSPeak
 {
     [ProcessNode]
-    public class VideoIn : IVideoSource2
+    public class VideoIn : IVideoSource2, IDisposable
     {
-        // Node context and logging
         private readonly ILogger _logger;
+        private readonly IDisposable _idsPeakLibSubscription;
 
         private int _changedTicket;
         private IDSDevice? _device;
-        private Connection? _currentConnection;
 
         public VideoIn([Pin(Visibility = PinVisibility.Hidden)] NodeContext nodeContext)
         {
             _logger = nodeContext.GetLogger();
+            _idsPeakLibSubscription = IdsPeakLibrary.Use();
         }
 
         [return: Pin(Name = "Output")]
@@ -41,22 +42,13 @@ namespace VL.IDSPeak
 
         IVideoPlayer? IVideoSource2.Start(VideoPlaybackContext ctx)
         {
-            if (_device is null)
-                return null;
-
-            var deviceDescriptor = _device.Tag as DeviceDescriptor;
+            var deviceDescriptor = _device?.Tag as DeviceDescriptor;
             if (deviceDescriptor is null)
                 return null;
 
-            if (_currentConnection != null)
-            {
-                _currentConnection.IsDisposed.WaitOne(1000);
-                _currentConnection = null;
-            }
-
             try
             {
-                return _currentConnection = Connection.Start(deviceDescriptor, _logger);
+                return Acquisition.Start(deviceDescriptor, _logger);
             }
             catch (Exception e)
             {
@@ -66,5 +58,10 @@ namespace VL.IDSPeak
         }
 
         int IVideoSource2.ChangedTicket => _changedTicket;
+
+        public void Dispose()
+        {
+            _idsPeakLibSubscription.Dispose();
+        }
     }
 }
