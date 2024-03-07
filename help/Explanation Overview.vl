@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document xmlns:p="property" xmlns:r="reflection" Id="Pgm1kAJUKLINfqGxTxoqce" LanguageVersion="2024.6.0-0244-ga4b76baedd" Version="0.128">
+  <NugetDependency Id="Q9Tj6aKzwwmMGVbSNKzOPX" Location="VL.CoreLib" Version="2024.6.0-0244-ga4b76baedd" />
+  <Patch Id="HqNcRBC9fevQLOlWrMJebq">
+    <Canvas Id="VVWL1exehLANYBjl42Upnf" DefaultCategory="Main" BordersChecked="false" CanvasType="FullCategory" />
+    <!--
+
+    ************************ Application ************************
+
+-->
+    <Node Name="Application" Bounds="100,100" Id="QLEcGjD9VKeMVgmQh8TPUZ">
+      <p:NodeReference>
+        <Choice Kind="ContainerDefinition" Name="Process" />
+        <CategoryReference Kind="Category" Name="Primitive" />
+      </p:NodeReference>
+      <Patch Id="DuXhi9OArWAOc6GNXZpqmb">
+        <Canvas Id="BwazeuqC1CmMEgL6EpXBPO" CanvasType="Group">
+          <Node Bounds="300,285,51,19" Id="GQDkh0DoY6oOxS1LF7ttzx">
+            <p:NodeReference LastCategoryFullName="Devices.IDS" LastDependency="VL.Devices.IDS.vl">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <Choice Kind="ProcessAppFlag" Name="VideoIn" />
+            </p:NodeReference>
+            <Pin Id="TlbCUQxg6qcPI8unK3nRUU" Name="Node Context" Kind="InputPin" IsHidden="true" />
+            <Pin Id="DrlRxaN4cqjOWhjPlmsGcj" Name="Device" Kind="InputPin" />
+            <Pin Id="K6xeG3dMZDeMa3MBtKFXye" Name="Output" Kind="OutputPin" />
+          </Node>
+          <Node Bounds="300,351,123,19" Id="LQCsfJDoKSyMR8FXlEhhv7">
+            <p:NodeReference LastCategoryFullName="Stride.Video" LastDependency="VL.Stride.vl">
+              <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
+              <Choice Kind="ProcessAppFlag" Name="VideoSourceToTexture" />
+            </p:NodeReference>
+            <Pin Id="PhZ2ZcTwjJYL6KSbFKI0iB" Name="Node Context" Kind="InputPin" IsHidden="true" />
+            <Pin Id="OGsZ3LibrzUMK3sfOdHg6J" Name="Input" Kind="InputPin" />
+            <Pin Id="HTtobq0htkmQQ83R98bjh1" Name="Fallback" Kind="InputPin" />
+            <Pin Id="P9UhVUKfegsPAXwzEphZQl" Name="Prefer Push" Kind="InputPin" />
+            <Pin Id="CZ6XEb7pNraNNRMNLyjPxR" Name="Prefer Gpu" Kind="InputPin" />
+            <Pin Id="KLjXNFwiJ6MMiCOEijnLWM" Name="Output" Kind="OutputPin" />
+          </Node>
+          <Pad Id="VNtgJZeqzPqN36vllBYMoX" Comment="Device" Bounds="302,236,56,15" ShowValueBox="true" isIOBox="true" Value="Default">
+            <p:TypeAnnotation LastCategoryFullName="Devices.IDS" LastDependency="VL.Devices.IDS.vl">
+              <Choice Kind="TypeFlag" Name="IDSDevice" />
+            </p:TypeAnnotation>
+          </Pad>
+          <Pad Id="MgAV7MocO0RPvYS5aKAjPK" Comment="" Bounds="302,411,190,132" ShowValueBox="true" isIOBox="true" />
+        </Canvas>
+        <Patch Id="LXunrCCTdysPcNciL4Upy1" Name="Create" />
+        <Patch Id="QmZlxI5qG6lPoJhwioMVNy" Name="Update" />
+        <ProcessDefinition Id="JfDTYn99I8YOM81n7WTERu">
+          <Fragment Id="BEyEUiWZZ31Nk9lcc4XHBm" Patch="LXunrCCTdysPcNciL4Upy1" Enabled="true" />
+          <Fragment Id="NPUfao2bI8XMogMZM7dBsS" Patch="QmZlxI5qG6lPoJhwioMVNy" Enabled="true" />
+        </ProcessDefinition>
+        <Slot Id="AMU6LsKVdbTLaul0lYkqkt" Name="List Devices" />
+        <Link Id="O3ygnSDKUOvNXcBFxsJRVU" Ids="K6xeG3dMZDeMa3MBtKFXye,OGsZ3LibrzUMK3sfOdHg6J" />
+        <Link Id="O6f1TPBb8HTMr8opYjhHyl" Ids="VNtgJZeqzPqN36vllBYMoX,DrlRxaN4cqjOWhjPlmsGcj" />
+        <Link Id="FQz9xfyUyx6Myov0QbBzRk" Ids="KLjXNFwiJ6MMiCOEijnLWM,MgAV7MocO0RPvYS5aKAjPK" />
+      </Patch>
+    </Node>
+  </Patch>
+  <NugetDependency Id="OwchC3mdpc9L5RcsU4CmBz" Location="VL.Devices.IDS" Version="0.0.0" />
+  <NugetDependency Id="RkzOy6Uht2OMHe8qTps6dN" Location="VL.Stride" Version="2024.6.0-0244-ga4b76baedd" />
+</Document>

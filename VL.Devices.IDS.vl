@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document xmlns:p="property" xmlns:r="reflection" Id="TEoViClnIiPLPD6d5SyQmz" LanguageVersion="2024.6.0-0244-ga4b76baedd" Version="0.128">
+  <NugetDependency Id="R3sWC8Aqk6BOEAE2UjKeGh" Location="VL.CoreLib" Version="2024.6.0-0244-ga4b76baedd" />
+  <Patch Id="EeTlA4Q3fthPdUynd1PrC4">
+    <Canvas Id="JDCTBaxsmzqOxqFLyMxKgM" DefaultCategory="Devices.IDS" CanvasType="FullCategory">
+      <!--
+
+    ************************ DeviceDescriptor ************************
+
+-->
+      <Node Name="DeviceDescriptor" Bounds="251,237" Id="AZ86FzB9OYyMiUmwOD75ia">
+        <p:NodeReference>
+          <Choice Kind="ForwardDefinition" Name="Forward" />
+          <CategoryReference Kind="Category" Name="Primitive" />
+        </p:NodeReference>
+        <p:TypeAnnotation LastCategoryFullName="peak.core" LastDependency="ids_peak_dotnet.dll">
+          <Choice Kind="TypeFlag" Name="DeviceDescriptor" />
+        </p:TypeAnnotation>
+        <Patch Id="KPP2RYTNAZ3NufZIyKpVEW">
+          <Canvas Id="MqSIZNcdO0AN5vs5WopU7Q" BordersChecked="false" CanvasType="Group" />
+          <ProcessDefinition Id="FqtZXJcWUkRNXrg9XIbkqz" IsHidden="true" />
+        </Patch>
+      </Node>
+    </Canvas>
+    <!--
+
+    ************************ Application ************************
+
+-->
+    <Node Name="Application" Bounds="100,100" Id="LxIcqvjMj24Oqnn28HWSGa">
+      <p:NodeReference>
+        <Choice Kind="ContainerDefinition" Name="Process" />
+        <CategoryReference Kind="Category" Name="Primitive" />
+      </p:NodeReference>
+      <Patch Id="MbRsIfAhLUzQIdJQtLozQg">
+        <Canvas Id="IGnkmNJWACSPew5GdbEtiZ" CanvasType="Group" />
+        <Patch Id="HEESEEOhZ8HNAmx3nOCyNZ" Name="Create" />
+        <Patch Id="UtfCQhaKmSqPTSfm3HufVk" Name="Update" />
+        <ProcessDefinition Id="LQKAGzmipdpMgOMHsPP99t">
+          <Fragment Id="QzMYA9kUvfEOmH4aKTH12c" Patch="HEESEEOhZ8HNAmx3nOCyNZ" Enabled="true" />
+          <Fragment Id="LWxR5p9Jd4aPJI8iywJaHn" Patch="UtfCQhaKmSqPTSfm3HufVk" Enabled="true" />
+        </ProcessDefinition>
+      </Patch>
+    </Node>
+  </Patch>
+  <PlatformDependency Id="KFZhoMRBg0nLkQUyAy74nt" Location="./lib/net6.0/ids_peak_dotnet.dll" />
+  <PlatformDependency Id="EQfb5gR8CmjNO0xPUmHdRU" Location="./lib/net8.0/VL.Devices.IDS.dll" IsForward="true" />
+</Document>

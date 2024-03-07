@@ -1,13 +1,11 @@
 ﻿using CommunityToolkit.HighPerformance;
 using Microsoft.Extensions.Logging;
 using peak.core;
-using peak.core.nodes;
 using peak.ipl;
 using VL.Lib.Basics.Resources;
 using VL.Lib.Basics.Video;
-using Buffer = peak.core.Buffer;
 
-namespace VL.IDSPeak
+namespace VL.Devices.IDS
 {
     internal class Acquisition : IVideoPlayer
     {

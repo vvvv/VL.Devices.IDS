@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <!--<GenerateDocumentationFile>True</GenerateDocumentationFile>-->
-    <OutputPath>..\..\lib</OutputPath>
+    <OutputPath>..\lib</OutputPath>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
     <VVVVInstallPath>C:\Program Files\vvvv\vvvv_gamma_5.3-0377-g503e8c1059</VVVVInstallPath>
@@ -14,15 +14,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="VL.Core" Version="2023.5.3-0338-g7d8db7daf1" />
+    <PackageReference Include="VL.Core" Version="2024.6.0-0244-ga4b76baedd" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="ids_peak_dotnet">
-      <HintPath>..\..\dependencies\ids_peak_dotnet.dll</HintPath>
+      <HintPath>..\dependencies\ids_peak_dotnet.dll</HintPath>
     </Reference>
     <Reference Include="ids_peak_ipl_dotnet">
-      <HintPath>..\..\dependencies\ids_peak_ipl_dotnet.dll</HintPath>
+      <HintPath>..\dependencies\ids_peak_ipl_dotnet.dll</HintPath>
     </Reference>
   </ItemGroup>
 

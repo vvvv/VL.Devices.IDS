@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Document xmlns:p="property" xmlns:r="reflection" Id="Pgm1kAJUKLINfqGxTxoqce" LanguageVersion="2023.5.3-0377-g503e8c1059" Version="0.128">
-  <NugetDependency Id="Q9Tj6aKzwwmMGVbSNKzOPX" Location="VL.CoreLib" Version="2023.5.3-0377-g503e8c1059" />
+<Document xmlns:p="property" xmlns:r="reflection" Id="Pgm1kAJUKLINfqGxTxoqce" LanguageVersion="2024.6.0-0244-ga4b76baedd" Version="0.128">
+  <NugetDependency Id="Q9Tj6aKzwwmMGVbSNKzOPX" Location="VL.CoreLib" Version="2024.6.0-0244-ga4b76baedd" />
   <Patch Id="HqNcRBC9fevQLOlWrMJebq">
     <Canvas Id="VVWL1exehLANYBjl42Upnf" DefaultCategory="Main" BordersChecked="false" CanvasType="FullCategory" />
     <!--
@@ -16,7 +16,7 @@
       <Patch Id="DuXhi9OArWAOc6GNXZpqmb">
         <Canvas Id="BwazeuqC1CmMEgL6EpXBPO" CanvasType="Group">
           <Node Bounds="300,285,65,19" Id="GQDkh0DoY6oOxS1LF7ttzx">
-            <p:NodeReference LastCategoryFullName="VL.IDSPeak" LastDependency="VL.IDSPeak.vl">
+            <p:NodeReference LastCategoryFullName="Devices.IDS" LastDependency="VL.Devices.IDS.vl">
               <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
               <Choice Kind="ProcessAppFlag" Name="VideoIn" />
             </p:NodeReference>
@@ -68,6 +68,7 @@
             <Pin Id="QLufomeadhCPJEEAE5Z9UH" Name="Space" Kind="InputPin" />
             <Pin Id="KZUw1dNM9FTPLyWZqnsCSP" Name="Show Cursor" Kind="InputPin" />
             <Pin Id="GCzzoQ24u3hPJOWYam1Gyv" Name="VSync" Kind="InputPin" />
+            <Pin Id="LF6AfGtclDEOqzptHg3QGp" Name="Commands" Kind="InputPin" IsHidden="true" />
             <Pin Id="AROE7BXkZMQO7bHd4ayQpy" Name="Enable Keyboard Shortcuts" Kind="InputPin" IsHidden="true" />
             <Pin Id="TV8rc2qtnC8MiOC41mi0NA" Name="Enabled" Kind="InputPin" />
             <Pin Id="Ofr6ZjiCo81ONgHuXD5fQH" Name="Form Bounds Notifications" Kind="OutputPin" IsHidden="true" />
@@ -109,6 +110,11 @@
             <Pin Id="CW27zcOa28ePXyaA6ZlwpM" Name="Baseline Position" Kind="OutputPin" />
           </Node>
           <Pad Id="ApT7gZqdgsLOWTI8LaxCze" Bounds="434,340" />
+          <Pad Id="VNtgJZeqzPqN36vllBYMoX" Comment="Device" Bounds="297,206,56,15" ShowValueBox="true" isIOBox="true" Value="Default">
+            <p:TypeAnnotation LastCategoryFullName="Devices.IDS" LastDependency="VL.Devices.IDS.vl">
+              <Choice Kind="TypeFlag" Name="IDSDevice" />
+            </p:TypeAnnotation>
+          </Pad>
         </Canvas>
         <Patch Id="LXunrCCTdysPcNciL4Upy1" Name="Create" ParticipatingElements="HrsF7nCE6tbOT55X9fsiaV" />
         <Patch Id="QmZlxI5qG6lPoJhwioMVNy" Name="Update" />
@@ -123,9 +129,10 @@
         <Link Id="L5GM7nAa0SHMztqjl1eYeL" Ids="GycSV0JMYMILClzYtNBS29,Ra8WJi6b5rsMIZMfve9TBH" />
         <Link Id="HrsF7nCE6tbOT55X9fsiaV" Ids="AvEkvryit6XOQ1HOgxfs9k,ApT7gZqdgsLOWTI8LaxCze" />
         <Link Id="CRVOlnDiN4BLRPyBfFGrlU" Ids="ApT7gZqdgsLOWTI8LaxCze,HTtobq0htkmQQ83R98bjh1" />
+        <Link Id="O6f1TPBb8HTMr8opYjhHyl" Ids="VNtgJZeqzPqN36vllBYMoX,DrlRxaN4cqjOWhjPlmsGcj" />
       </Patch>
     </Node>
   </Patch>
-  <NugetDependency Id="T7otMm6hGgTP2z6fvOeYVL" Location="VL.IDSPeak" Version="0.0.0" />
-  <NugetDependency Id="JKJ27nXWYysPfjWqa1CMys" Location="VL.Skia" Version="2023.5.3-0377-g503e8c1059" />
+  <NugetDependency Id="JKJ27nXWYysPfjWqa1CMys" Location="VL.Skia" Version="2024.6.0-0244-ga4b76baedd" />
+  <NugetDependency Id="OwchC3mdpc9L5RcsU4CmBz" Location="VL.Devices.IDS" Version="0.0.0" />
 </Document>

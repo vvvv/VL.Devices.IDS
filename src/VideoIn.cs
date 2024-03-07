@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using peak;
+﻿using Microsoft.Extensions.Logging;
 using peak.core;
 using VL.Lib.Basics.Video;
 using VL.Model;
 
-namespace VL.IDSPeak
+namespace VL.Devices.IDS
 {
     [ProcessNode]
     public class VideoIn : IVideoSource2, IDisposable

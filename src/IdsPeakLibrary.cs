@@ -1,7 +1,7 @@
 ﻿using System.Reactive.Disposables;
 using System.Runtime.ExceptionServices;
 
-namespace VL.IDSPeak
+namespace VL.Devices.IDS
 {
     internal class IdsPeakLibrary
     {

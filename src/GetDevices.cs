@@ -1,10 +1,7 @@
-// For examples, see:
-// https://thegraybook.vvvv.org/reference/extending/writing-nodes.html#examples
-
 using peak;
 using peak.core;
 
-namespace IO.IDSPeak;
+namespace IO.Devices.IDS;
 
 [ProcessNode]
 public class ListDevices
