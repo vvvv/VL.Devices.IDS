@@ -41,14 +41,7 @@ namespace VL.Devices.IDS
                 _changedTicket++;
             }
 
-            if (this.Info != null)
-            {
-                Info = this.Info;
-            }
-            else
-            {
-                Info = "";
-            }
+            Info = this.Info;
 
             return this;
         }
