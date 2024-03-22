@@ -9,7 +9,7 @@ namespace VL.Devices.IDS
 {
     internal class Acquisition : IVideoPlayer
     {
-        public static Acquisition? Start(DeviceDescriptor deviceDescriptor, ILogger logger)
+        public static Acquisition? Start(VideoIn videoIn, DeviceDescriptor deviceDescriptor, ILogger logger, Int2 resolution, int fps)
         {
             logger.Log(LogLevel.Information, "Starting image acquisition on {device}", deviceDescriptor.DisplayName());
 
@@ -57,6 +57,24 @@ namespace VL.Devices.IDS
             // Get the payload size for correct buffer allocation
             var payloadSize = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("PayloadSize").Value();
 
+            // get min and max fps
+            var minFPS = nodeMapRemoteDevice.FindNode<peak.core.nodes.FloatNode>("AcquisitionFrameRateMinFunc").Value();
+            var maxFPS = nodeMapRemoteDevice.FindNode<peak.core.nodes.FloatNode>("AcquisitionFrameRateMaxFunc").Value();
+
+            // get max width and height
+            var maxWidth = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("WidthMax").Value();
+            var maxHeight = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("HeightMax").Value();
+
+            // get min width and height
+            var minWidth = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("WidthMinReg").Value();
+            var minHeight = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("HeightMinReg").Value();
+
+            // set resolution and fps
+            nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("Width").SetValue(Math.Max(Math.Min(maxWidth, resolution.X), minWidth));
+            nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("Height").SetValue(Math.Max(Math.Min(maxHeight, resolution.Y), minHeight));
+            nodeMapRemoteDevice.FindNode<peak.core.nodes.FloatNode>("AcquisitionFrameRate").SetValue(Math.Max(Math.Min(fps, maxFPS), minFPS));
+
+
             // Get the minimum number of buffers that must be announced
             var bufferCountMax = dataStream.NumBuffersAnnouncedMinRequired();
 
@@ -77,7 +95,16 @@ namespace VL.Devices.IDS
             nodeMapRemoteDevice.FindNode<peak.core.nodes.CommandNode>("AcquisitionStart").Execute();
             nodeMapRemoteDevice.FindNode<peak.core.nodes.CommandNode>("AcquisitionStart").WaitUntilDone();
 
-            return new Acquisition(logger, device, dataStream, nodeMapRemoteDevice);
+            var width = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("Width").Value();
+            var height = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("Height").Value();
+
+            //return debug info
+            videoIn.Info = "Max. resolution (w x h): " + maxWidth + " x " + maxHeight
+                          + $"\r\nMin. resolution (w x h): " + minWidth + " x " + minHeight
+                          + $"\r\nCurrent resolution (w x h): " + width + " x " + height
+                          + $"\r\nFramerate range: [{minFPS}, {maxFPS}], current FPS: {nodeMapRemoteDevice.FindNode<peak.core.nodes.FloatNode>("AcquisitionFrameRate").Value()}";
+
+            return new Acquisition(logger, device, dataStream, nodeMapRemoteDevice, new Int2((int)width, (int)height));
         }
 
         private readonly IDisposable _idsPeakLibSubscription;
@@ -86,8 +113,9 @@ namespace VL.Devices.IDS
         private readonly DataStream _dataStream;
         private readonly NodeMap _nodeMapRemoteDevice;
         private readonly ImageConverter _imageConverter;
+        private readonly Int2 _resolution;
 
-        public Acquisition(ILogger logger, Device device, DataStream dataStream, NodeMap nodeMapRemoteDevice)
+        public Acquisition(ILogger logger, Device device, DataStream dataStream, NodeMap nodeMapRemoteDevice, Int2 resolution)
         {
             _idsPeakLibSubscription = IdsPeakLibrary.Use();
             _logger = logger;
@@ -95,6 +123,7 @@ namespace VL.Devices.IDS
             _dataStream = dataStream;
             _nodeMapRemoteDevice = nodeMapRemoteDevice;
             _imageConverter = new ImageConverter();
+            _resolution = resolution;
         }
 
         public PixelFormat PixelFormat { get; set; } = new PixelFormat(PixelFormatName.BGRa8);
