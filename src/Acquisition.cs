@@ -1,7 +1,10 @@
 ﻿using CommunityToolkit.HighPerformance;
 using Microsoft.Extensions.Logging;
 using peak.core;
+using peak.core.nodes;
 using peak.ipl;
+using System.Net.WebSockets;
+using System.Text;
 using VL.Lib.Basics.Resources;
 using VL.Lib.Basics.Video;
 
@@ -9,7 +12,7 @@ namespace VL.Devices.IDS
 {
     internal class Acquisition : IVideoPlayer
     {
-        public static Acquisition? Start(VideoIn videoIn, DeviceDescriptor deviceDescriptor, ILogger logger, Int2 resolution, int fps)
+        public static Acquisition? Start(VideoIn videoIn, DeviceDescriptor deviceDescriptor, ILogger logger, Int2 resolution, int fps, IConfiguration? configuration)
         {
             logger.Log(LogLevel.Information, "Starting image acquisition on {device}", deviceDescriptor.DisplayName());
 
@@ -73,7 +76,7 @@ namespace VL.Devices.IDS
             nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("Width").SetValue(Math.Max(Math.Min(maxWidth, resolution.X), minWidth));
             nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("Height").SetValue(Math.Max(Math.Min(maxHeight, resolution.Y), minHeight));
             nodeMapRemoteDevice.FindNode<peak.core.nodes.FloatNode>("AcquisitionFrameRate").SetValue(Math.Max(Math.Min(fps, maxFPS), minFPS));
-
+            
 
             // Get the minimum number of buffers that must be announced
             var bufferCountMax = dataStream.NumBuffersAnnouncedMinRequired();
@@ -86,25 +89,125 @@ namespace VL.Devices.IDS
             }
 
             // Lock critical features to prevent them from changing during acquisition
-            nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("TLParamsLocked").SetValue(1);
+            nodeMapRemoteDevice.FindNode<IntegerNode>("TLParamsLocked").SetValue(1);
+
+            //apply static parameters
+            configuration?.Configure(nodeMapRemoteDevice);
+
+            //collect available properties
+            var spb = new SpreadBuilder<PropertyInfo>();
+            CollectPropertiesInfos(spb, nodeMapRemoteDevice);
+            videoIn.PropertyInfos = spb.ToSpread();
 
             // Start the acquisition engine in the transport layer
             dataStream.StartAcquisition();
 
             // Start the acquisition in the Remote Device
-            nodeMapRemoteDevice.FindNode<peak.core.nodes.CommandNode>("AcquisitionStart").Execute();
-            nodeMapRemoteDevice.FindNode<peak.core.nodes.CommandNode>("AcquisitionStart").WaitUntilDone();
+            nodeMapRemoteDevice.FindNode<CommandNode>("AcquisitionStart").Execute();
+            nodeMapRemoteDevice.FindNode<CommandNode>("AcquisitionStart").WaitUntilDone();
 
-            var width = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("Width").Value();
-            var height = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("Height").Value();
+            var width = nodeMapRemoteDevice.FindNode<IntegerNode>("Width").Value();
+            var height = nodeMapRemoteDevice.FindNode<IntegerNode>("Height").Value();
 
             //return debug info
             videoIn.Info = "Max. resolution (w x h): " + maxWidth + " x " + maxHeight
                           + $"\r\nMin. resolution (w x h): " + minWidth + " x " + minHeight
                           + $"\r\nCurrent resolution (w x h): " + width + " x " + height
-                          + $"\r\nFramerate range: [{minFPS}, {maxFPS}], current FPS: {nodeMapRemoteDevice.FindNode<peak.core.nodes.FloatNode>("AcquisitionFrameRate").Value()}";
+                          + $"\r\nFramerate range: [{minFPS}, {maxFPS}], current FPS: {nodeMapRemoteDevice.FindNode<FloatNode>("AcquisitionFrameRate").Value()}" +
+                            $"\r\n";
+
+            /*
+            //debug properites list
+            string props = "";
+            var allProps = nodeMapRemoteDevice.Nodes();
+            foreach (var prop in allProps)
+            {
+                if (prop.IsFeature() && prop.AccessStatus() == NodeAccessStatus.ReadWrite)
+                    //if (prop.Type() != NodeType.Command)
+                    {
+                        props += $"\r\n{prop.Name()} ({prop.Type()}) Description: {prop.Description()}";
+                    }
+            }
+            videoIn.Info += props + $"\r\n";
+
+            //debug properties tree
+            var sb = new StringBuilder();
+            foreach (var n in nodeMapRemoteDevice.Nodes())
+            {
+                TraverseCategories(sb, n, "");
+            }
+            videoIn.Info += $"\r\n" + sb.ToString();*/
 
             return new Acquisition(logger, device, dataStream, nodeMapRemoteDevice, new Int2((int)width, (int)height));
+        }
+
+        static void CollectPropertiesInfos(SpreadBuilder<PropertyInfo> spb, NodeMap propertyMap)
+        {
+            var props = propertyMap.Nodes()
+                .Where(x => x.IsFeature())
+                .Where(x => x.AccessStatus() == NodeAccessStatus.ReadWrite)
+                .Where(x => x.Type() != NodeType.Command);
+            foreach (var p in props)
+            {
+                switch (p.Type())
+                {
+                    case NodeType.Float:
+                        var f = propertyMap.FindNodeFloat(p.Name());
+                        spb.Add(new PropertyInfo(f.Name(), f.Value(), f.Description(), f.Minimum(), f.Maximum(), Spread<string>.Empty, f.Type().ToString(), f.AccessStatus().ToString()));
+                        break;
+
+                    case NodeType.Integer:
+                        var i = propertyMap.FindNodeInteger(p.Name());
+                        spb.Add(new PropertyInfo(i.Name(), i.Value(), i.Description(), i.Minimum(), i.Maximum(), Spread<string>.Empty, i.Type().ToString(), i.AccessStatus().ToString()));
+                        break;
+
+                    case NodeType.Boolean:
+                        var b = propertyMap.FindNodeBoolean(p.Name());
+                        spb.Add(new PropertyInfo(b.Name(), b.Value(), b.Description(), false, true, Spread<string>.Empty, b.Type().ToString(), b.AccessStatus().ToString()));
+                        break;
+
+                    case NodeType.String:
+                        var s = propertyMap.FindNodeString(p.Name());
+                        spb.Add(new PropertyInfo(s.Name(), s.Value(), s.Description(), "", "", Spread<string>.Empty, s.Type().ToString(), s.AccessStatus().ToString()));
+                        break;
+
+                    case NodeType.Enumeration:
+                        var e = propertyMap.FindNodeEnumeration(p.Name());
+                        spb.Add(new PropertyInfo(e.Name(), e.CurrentEntry().Name(), e.Description(), "", "", e.Entries().Select(x => x.Name()).ToSpread(), e.Type().ToString(), e.AccessStatus().ToString()));
+                        break;
+
+                    default:
+                        // cannot set value
+                        break;
+                }
+            }
+        }
+
+        static void TraverseCategories(StringBuilder sb, Node p, string offset)
+        {
+            if (p is CategoryNode c)
+            {
+                sb.AppendLine($"{offset}--{c.Name()} ({c.Type()}) Description: {c.Description()}");
+                foreach (var cp in c.SubNodes())
+                {
+                    //if (!cp.IsFeature() && cp.AccessStatus() == NodeAccessStatus.ReadWrite)
+                    {
+                        if (cp.Type() != NodeType.Category)
+                        {
+                            sb.AppendLine($"{offset}    {cp.Name()} ({cp.Type()}) Description: {cp.Description()}");
+                        }
+                        else
+                        {
+                            TraverseCategories(sb, cp, offset + "    ");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                sb.AppendLine($"\r\n{offset}{p.Name()} ({p.Type()}) Description: {p.Description()}");
+            }
+            return;
         }
 
         private readonly IDisposable _idsPeakLibSubscription;
@@ -128,8 +231,17 @@ namespace VL.Devices.IDS
 
         public PixelFormat PixelFormat { get; set; } = new PixelFormat(PixelFormatName.BGRa8);
 
+        public bool IsDisposed { get; private set; }
+
+        public NodeMap NodeMap => _device.RemoteDevice().NodeMaps()[0];
+
         public void Dispose()
         {
+            if (IsDisposed)
+                return;
+
+            IsDisposed = true;
+
             _logger.Log(LogLevel.Information, "Stopping image acquisition");
 
             try

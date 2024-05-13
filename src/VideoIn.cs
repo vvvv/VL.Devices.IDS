@@ -3,6 +3,9 @@ using System.ComponentModel;
 using peak.core;
 using VL.Lib.Basics.Video;
 using VL.Model;
+using System.Reactive.Subjects;
+using System.Reactive.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace VL.Devices.IDS
 {
@@ -11,13 +14,16 @@ namespace VL.Devices.IDS
     {
         private readonly ILogger _logger;
         private readonly IDisposable _idsPeakLibSubscription;
+        private readonly BehaviorSubject<Acquisition?> _aquicitionStarted = new BehaviorSubject<Acquisition?>(null);
 
         private int _changedTicket;
         private DeviceDescriptor? _device; 
         private Int2 _resolution;
         private int _fps;
+        private IConfiguration? _configuration;
 
         internal string Info { get; set; } = "";
+        internal Spread<PropertyInfo> PropertyInfos { get; set; } = new SpreadBuilder<PropertyInfo>().ToSpread();
 
         public VideoIn([Pin(Visibility = PinVisibility.Hidden)] NodeContext nodeContext)
         {
@@ -26,25 +32,31 @@ namespace VL.Devices.IDS
         }
 
         [return: Pin(Name = "Output")]
-        public IVideoSource Update(
+        public VideoIn Update(
             IDSDevice? device,
             [DefaultValue("640, 480")] Int2 resolution,
             [DefaultValue("30")] int fps,
+            IConfiguration configuration,
+            out Spread<PropertyInfo> PropertyInfos,
             out string Info)
         {
             // By comparing the descriptor we can be sure that on re-connect of the device we see the change
-            if (device?.Tag != _device || resolution != _resolution || fps != _fps)
+            if (device?.Tag != _device || resolution != _resolution || fps != _fps || configuration != _configuration)
             {
                 _device = device?.Tag as DeviceDescriptor;
                 _resolution = resolution;
                 _fps = fps;
+                _configuration = configuration;
                 _changedTicket++;
             }
 
+            PropertyInfos = this.PropertyInfos;
             Info = this.Info;
 
             return this;
         }
+
+        internal IObservable<Acquisition> AcquisitionStarted => _aquicitionStarted.Where(a => a != null && !a.IsDisposed)!;
 
         IVideoPlayer? IVideoSource2.Start(VideoPlaybackContext ctx)
         {
@@ -54,7 +66,9 @@ namespace VL.Devices.IDS
 
             try
             {
-                return Acquisition.Start(this, device, _logger, _resolution, _fps);
+                var result = Acquisition.Start(this, device, _logger, _resolution, _fps, _configuration);
+                _aquicitionStarted.OnNext(result);
+                return result;
             }
             catch (Exception e)
             {

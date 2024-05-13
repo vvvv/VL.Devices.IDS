@@ -2,7 +2,7 @@
   "profiles": {
     "vvvv gamma 5.3": {
       "commandName": "Executable",
-      "executablePath": "C:\\Program Files\\vvvv\\vvvv_gamma_6.0-0295-g4d01577ad4\\vvvv.exe",
+      "executablePath": "C:\\Program Files\\vvvv\\vvvv_gamma_6.3-0015-gd6867805c4\\vvvv.exe",
       "commandLineArgs": "--package-repositories \"C:\\Users\\alex\\Documents\\libs\" --editable-packages VL.Devices.IDS -o \"C:\\Users\\alex\\Documents\\libs\\VL.Devices.IDS\\help\\Explanation Overview.vl\""
     }
   }
