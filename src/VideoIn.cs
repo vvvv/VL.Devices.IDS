@@ -5,7 +5,6 @@ using VL.Lib.Basics.Video;
 using VL.Model;
 using System.Reactive.Subjects;
 using System.Reactive.Linq;
-using Microsoft.Extensions.Configuration;
 
 namespace VL.Devices.IDS
 {
@@ -35,22 +34,20 @@ namespace VL.Devices.IDS
         public VideoIn Update(
             IDSDevice? device,
             [DefaultValue("640, 480")] Int2 resolution,
-            [DefaultValue("30")] int fps,
+            [DefaultValue("30")] int FPS,
             IConfiguration configuration,
-            out Spread<PropertyInfo> PropertyInfos,
             out string Info)
         {
             // By comparing the descriptor we can be sure that on re-connect of the device we see the change
-            if (device?.Tag != _device || resolution != _resolution || fps != _fps || configuration != _configuration)
+            if (device?.Tag != _device || resolution != _resolution || FPS != _fps || configuration != _configuration)
             {
                 _device = device?.Tag as DeviceDescriptor;
                 _resolution = resolution;
-                _fps = fps;
+                _fps = FPS;
                 _configuration = configuration;
                 _changedTicket++;
             }
 
-            PropertyInfos = this.PropertyInfos;
             Info = this.Info;
 
             return this;

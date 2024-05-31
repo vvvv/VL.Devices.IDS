@@ -1,21 +1,23 @@
-﻿using peak.core;
+﻿/*using peak.core;
 using Path = VL.Lib.IO.Path;
 
 namespace VL.Devices.IDS
 {
-    [ProcessNode(Name = "FromFile")]
+    [ProcessNode(Name = "ConfigReader")]
     public class FileConfigurationNode
     {
         IConfiguration? configuration;
         Path? file;
 
-        public IConfiguration Update(Path file)
+        [return: Pin(Name = "Output")]
+        public IConfiguration Update(
+            Path filePath,
+            bool read)
         {
-            if (file != this.file)
+            if (read)
             {
-                this.file = file;
-                configuration = new FileConfiguration(file);
-
+                this.file = filePath;
+                configuration = new FileConfiguration(filePath);
             }
             return configuration!;
         }
@@ -40,3 +42,4 @@ namespace VL.Devices.IDS
         }
     }
 }
+*/

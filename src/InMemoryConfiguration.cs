@@ -5,13 +5,13 @@ using System.Collections.Immutable;
 
 namespace VL.Devices.IDS
 {
-    [ProcessNode(Name = "SetProperty")]
+    [ProcessNode(Name = "ConfigProperty")]
     public class ConfigNode<T> : IConfiguration
     {
         private readonly ILogger logger;
 
         IConfiguration? input;
-        string? key;
+        string? name;
         T? value;
         FreshConfig? output;
 
@@ -20,12 +20,13 @@ namespace VL.Devices.IDS
             this.logger = nodeContext.GetLogger();
         }
 
-        public IConfiguration Update(IConfiguration input, string key, T value)
+        [return: Pin(Name = "Output")]
+        public IConfiguration Update(IConfiguration input, string name, T value)
         {
-            if (input != this.input || key != this.key || !EqualityComparer<T>.Default.Equals(value, this.value))
+            if (input != this.input || name != this.name || !EqualityComparer<T>.Default.Equals(value, this.value))
             {
                 this.input = input;
-                this.key = key;
+                this.name = name;
                 this.value = value;
                 output = new FreshConfig(this);
             }
@@ -36,10 +37,10 @@ namespace VL.Devices.IDS
         {
             input?.Configure(nodeMap);
 
-            Node p = nodeMap.FindNode(key);
+            Node p = nodeMap.FindNode(name);
             if (p is null)
             {
-                logger.LogError("Property with name {key} not found.", key);
+                logger.LogError("Property with name {name} not found.", name);
                 return;
             }
 

@@ -5,7 +5,7 @@ using Path = VL.Lib.IO.Path;
 
 namespace VL.Devices.IDS
 {
-    [ProcessNode]
+    [ProcessNode(Name = "ConfigWriter")]
     public class SaveConfigToFile : IDisposable
     {
         private readonly ILogger logger;
@@ -16,20 +16,20 @@ namespace VL.Devices.IDS
             logger = nodeContext.GetLogger();
         }
 
-        public void Update(VideoIn? videoIn, Path path, bool save)
+        public void Update(VideoIn? videoIn, Path filePath, bool write)
         {
             if (videoIn is null)
                 return;
 
-            if (save)
+            if (write)
             {
                 serialDisposable.Disposable = videoIn.AcquisitionStarted.Take(1)
                     .Subscribe(a =>
                     {
                         try
                         {
-                            //a.NodeMap.StoreToFile(path.ToString());
-                            a.NodeMap.FindNodeString("UEyeParametersetPath").SetValue(path.ToString());
+                            //a.NodeMap.StoreToFile(filePath.ToString());
+                            a.NodeMap.FindNodeString("UEyeParametersetPath").SetValue(filePath.ToString());
                             a.NodeMap.FindNodeCommand("UEyeParametersetSave").Execute();
                         }
                         catch (Exception e)
