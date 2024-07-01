@@ -1,6 +1,6 @@
 ﻿using peak.core;
 
-namespace VL.Devices.IDS
+namespace VL.Devices.IDS.Advanced
 {
     public interface IConfiguration
     {

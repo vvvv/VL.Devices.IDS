@@ -16,14 +16,14 @@ namespace VL.Devices.IDS
             logger = nodeContext.GetLogger();
         }
 
-        public void Update(VideoIn? videoIn, Path filePath, bool write)
+        public void Update(VideoIn? input, Path filePath, bool write)
         {
-            if (videoIn is null)
+            if (input is null)
                 return;
 
             if (write)
             {
-                serialDisposable.Disposable = videoIn.AcquisitionStarted.Take(1)
+                serialDisposable.Disposable = input.AcquisitionStarted.Take(1)
                     .Subscribe(a =>
                     {
                         try

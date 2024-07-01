@@ -4,6 +4,7 @@ using peak.core;
 using peak.core.nodes;
 using peak.ipl;
 using System.Text;
+using VL.Devices.IDS.Advanced;
 using VL.Lib.Basics.Resources;
 using VL.Lib.Basics.Video;
 
@@ -289,7 +290,7 @@ namespace VL.Devices.IDS
 
         public unsafe IResourceProvider<VideoFrame>? GrabVideoFrame()
         {
-            using var buffer = _dataStream.WaitForFinishedBuffer(100);
+            using var buffer = _dataStream.WaitForFinishedBuffer(1100); //should be long enough for the lowest frame rate
 
             if (!buffer.HasNewData() || buffer.IsIncomplete())
             {

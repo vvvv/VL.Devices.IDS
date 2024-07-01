@@ -6,7 +6,7 @@ using VL.Core.CompilerServices;
 using VL.Lib;
 
 
-namespace VL.Devices.IDS;
+namespace VL.Devices.IDS.Advanced;
 
 [Serializable]
 public class IDSDevice : DynamicEnumBase<IDSDevice, IDSDeviceDefinition>

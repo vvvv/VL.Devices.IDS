@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="VL.Core" Version="2024.6.0-0244-ga4b76baedd" />
+    <PackageReference Include="VL.Core" Version="2024.6.5" />
   </ItemGroup>
 
   <ItemGroup>

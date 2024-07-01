@@ -2,6 +2,7 @@
 using peak.core.nodes;
 using Microsoft.Extensions.Logging;
 using System.Collections.Immutable;
+using VL.Devices.IDS.Advanced;
 
 namespace VL.Devices.IDS
 {
