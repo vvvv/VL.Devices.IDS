@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Document xmlns:p="property" xmlns:r="reflection" Id="Pgm1kAJUKLINfqGxTxoqce" LanguageVersion="2024.6.6-0034-g3b5a74f188" Version="0.128">
-  <NugetDependency Id="Q9Tj6aKzwwmMGVbSNKzOPX" Location="VL.CoreLib" Version="2024.6.6-0034-g3b5a74f188" />
+<Document xmlns:p="property" xmlns:r="reflection" Id="Pgm1kAJUKLINfqGxTxoqce" LanguageVersion="2024.6.6" Version="0.128">
+  <NugetDependency Id="Q9Tj6aKzwwmMGVbSNKzOPX" Location="VL.CoreLib" Version="2024.6.6" />
   <Patch Id="HqNcRBC9fevQLOlWrMJebq">
     <Canvas Id="VVWL1exehLANYBjl42Upnf" DefaultCategory="Main" BordersChecked="false" CanvasType="FullCategory" />
     <!--
@@ -42,7 +42,7 @@
             <Pin Id="CZ6XEb7pNraNNRMNLyjPxR" Name="Prefer Gpu" Kind="InputPin" />
             <Pin Id="KLjXNFwiJ6MMiCOEijnLWM" Name="Output" Kind="OutputPin" />
           </Node>
-          <Pad Id="VNtgJZeqzPqN36vllBYMoX" Comment="Device" Bounds="345,140,254,15" ShowValueBox="true" isIOBox="true" Value="Default">
+          <Pad Id="VNtgJZeqzPqN36vllBYMoX" Comment="Device" Bounds="268,235,254,15" ShowValueBox="true" isIOBox="true" Value="Default">
             <p:TypeAnnotation LastCategoryFullName="Devices.IDS" LastDependency="VL.Devices.IDS.vl">
               <Choice Kind="TypeFlag" Name="IDSDevice" />
             </p:TypeAnnotation>
@@ -125,7 +125,7 @@
           </Node>
           <Pad Id="PgO1hXP7dooO5wXDFvHds8" Comment="Type" Bounds="933,787,88,15" ShowValueBox="true" isIOBox="true" />
           <Pad Id="SHwBnhUiBg0Nj43Jr9vt7r" Comment="Access Status" Bounds="996,723,73,17" ShowValueBox="true" isIOBox="true" />
-          <Node Bounds="614,160,84,19" Id="HNXp1XJwXQbPlcObViS7lW">
+          <Node Bounds="613,160,84,19" Id="HNXp1XJwXQbPlcObViS7lW">
             <p:NodeReference LastCategoryFullName="Devices.IDS" LastDependency="VL.Devices.IDS.vl">
               <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
               <CategoryReference Kind="Category" Name="IDS" />
@@ -137,17 +137,17 @@
             <Pin Id="CKxDJdAKwwdPfiuZw6ZaCl" Name="Value" Kind="InputPin" />
             <Pin Id="CEhopCAS096MyGCq8VDwOR" Name="Output" Kind="OutputPin" />
           </Node>
-          <Pad Id="NwxeMQDq233NQD94Z0gPie" Comment="" Bounds="679,144,41,15" ShowValueBox="true" isIOBox="true" Value="2.04">
+          <Pad Id="NwxeMQDq233NQD94Z0gPie" Comment="" Bounds="678,144,41,15" ShowValueBox="true" isIOBox="true" Value="2.04">
             <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
               <Choice Kind="ImmutableTypeFlag" Name="Float32" />
             </p:TypeAnnotation>
           </Pad>
-          <Pad Id="SIAh0f1GYM6Nf4R5TBtKbq" Comment="Name" Bounds="654,110,47,15" ShowValueBox="true" isIOBox="true" Value="Gain">
+          <Pad Id="SIAh0f1GYM6Nf4R5TBtKbq" Comment="Name" Bounds="653,110,47,15" ShowValueBox="true" isIOBox="true" Value="Gain">
             <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
               <Choice Kind="TypeFlag" Name="String" />
             </p:TypeAnnotation>
           </Pad>
-          <Node Bounds="350,825,94,19" Id="UgAaEoVvmkeLf8ViioFHCw">
+          <Node Bounds="345,825,94,19" Id="UgAaEoVvmkeLf8ViioFHCw">
             <p:NodeReference LastCategoryFullName="Devices.IDS" LastDependency="VL.Devices.IDS.vl">
               <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
               <FullNameCategoryReference ID="Devices.IDS" />
@@ -159,12 +159,12 @@
             <Pin Id="EXoqsxrfIvpMoQfh05d11Z" Name="File Path" Kind="InputPin" />
             <Pin Id="N1KmfEVwrSrOdIrKCg4LsL" Name="Write" Kind="InputPin" />
           </Node>
-          <Pad Id="EKghf8tOIMlMCfjFR7h3Zc" Comment="File Path" Bounds="396,754,140,15" ShowValueBox="true" isIOBox="true" Value="camera_config.ini">
+          <Pad Id="EKghf8tOIMlMCfjFR7h3Zc" Comment="File Path" Bounds="391,754,140,15" ShowValueBox="true" isIOBox="true" Value="camera_config.ini">
             <p:TypeAnnotation LastCategoryFullName="IO" LastDependency="VL.CoreLib.vl">
               <Choice Kind="TypeFlag" Name="Path" />
             </p:TypeAnnotation>
           </Pad>
-          <Pad Id="PASiZ1UAP2aLNrcN0GvpHh" Comment="Write" Bounds="441,791,35,35" ShowValueBox="true" isIOBox="true" Value="false">
+          <Pad Id="PASiZ1UAP2aLNrcN0GvpHh" Comment="Write" Bounds="436,791,35,35" ShowValueBox="true" isIOBox="true" Value="false">
             <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
               <Choice Kind="ImmutableTypeFlag" Name="Boolean" />
             </p:TypeAnnotation>
@@ -172,7 +172,7 @@
               <p:buttonmode p:Assembly="VL.UI.Forms" p:Type="VL.HDE.PatchEditor.Editors.ButtonModeEnum">Bang</p:buttonmode>
             </p:ValueBoxSettings>
           </Pad>
-          <Node Bounds="1059,520,103,19" Id="RWEirLmGv1hOcsVzU6d3oG">
+          <Node Bounds="714,450,103,19" Id="RWEirLmGv1hOcsVzU6d3oG">
             <p:NodeReference LastCategoryFullName="Devices.IDS" LastDependency="VL.Devices.IDS.vl">
               <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
               <FullNameCategoryReference ID="Devices.IDS" />
@@ -183,7 +183,7 @@
             <Pin Id="I3vYaxim7UyLkzPbIWu92s" Name="Input" Kind="InputPin" />
             <Pin Id="AaaaESZl5iAOkVMZmT8rDM" Name="Properties" Kind="OutputPin" />
           </Node>
-          <Pad Id="EKyTZ2JRnXZOH19Zrfhx7X" Comment="Properties" Bounds="1060,576,131,95" ShowValueBox="true" isIOBox="true">
+          <Pad Id="EKyTZ2JRnXZOH19Zrfhx7X" Comment="Properties" Bounds="716,506,131,95" ShowValueBox="true" isIOBox="true">
             <p:Value>
               <Item>DeviceClockSelector</Item>
               <Item>DeviceClockFrequency</Item>
@@ -233,12 +233,12 @@
             <Pin Id="KFxNLbEYbfAQU2F3Bl2VpL" Name="Name" Kind="InputPin" />
             <Pin Id="TdDLJeHCjaOQbRJgjiGIXQ" Name="Property Info" Kind="OutputPin" />
           </Node>
-          <Pad Id="Efs8x0yRneMPjjlrjCkF3E" Comment="Name" Bounds="546,510,90,15" ShowValueBox="true" isIOBox="true" Value="Gain">
+          <Pad Id="Efs8x0yRneMPjjlrjCkF3E" Comment="Name" Bounds="547,510,90,15" ShowValueBox="true" isIOBox="true" Value="Gain">
             <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
               <Choice Kind="TypeFlag" Name="String" />
             </p:TypeAnnotation>
           </Pad>
-          <Node Bounds="614,250,84,19" Id="OMq03149o5dPgCZKFoMukA">
+          <Node Bounds="613,250,84,19" Id="OMq03149o5dPgCZKFoMukA">
             <p:NodeReference LastCategoryFullName="Devices.IDS" LastDependency="VL.Devices.IDS.vl">
               <Choice Kind="NodeFlag" Name="Node" Fixed="true" />
               <CategoryReference Kind="Category" Name="IDS" />
@@ -251,17 +251,17 @@
             <Pin Id="JV3Ugg7tR4kMqf6QOsM6XA" Name="Value" Kind="InputPin" />
             <Pin Id="L3F2GPOutSjM67pCz3a9eh" Name="Output" Kind="OutputPin" />
           </Node>
-          <Pad Id="JhR6LNDp8iRNNrD3SHuTEb" Comment="" Bounds="679,234,41,15" ShowValueBox="true" isIOBox="true" Value="4.74">
+          <Pad Id="JhR6LNDp8iRNNrD3SHuTEb" Comment="" Bounds="678,234,41,15" ShowValueBox="true" isIOBox="true" Value="4.74">
             <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
               <Choice Kind="ImmutableTypeFlag" Name="Float32" />
             </p:TypeAnnotation>
           </Pad>
-          <Pad Id="JiqPOsinxhZPPoQDkHwsXj" Comment="Name" Bounds="656,210,106,15" ShowValueBox="true" isIOBox="true" Value="BlackLevel">
+          <Pad Id="JiqPOsinxhZPPoQDkHwsXj" Comment="Name" Bounds="655,210,106,15" ShowValueBox="true" isIOBox="true" Value="BlackLevel">
             <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
               <Choice Kind="TypeFlag" Name="String" />
             </p:TypeAnnotation>
           </Pad>
-          <Pad Id="MafKembBq6yNODbmGpCIUp" Bounds="96,82,152,45" ShowValueBox="true" isIOBox="true" Value="For driver installation requirements, see:">
+          <Pad Id="MafKembBq6yNODbmGpCIUp" Bounds="132,121,152,45" ShowValueBox="true" isIOBox="true" Value="For driver installation requirements, see:">
             <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
               <Choice Kind="TypeFlag" Name="String" />
             </p:TypeAnnotation>
@@ -270,7 +270,7 @@
               <p:stringtype p:Assembly="VL.Core" p:Type="VL.Core.StringType">Comment</p:stringtype>
             </p:ValueBoxSettings>
           </Pad>
-          <Pad Id="JplGUzC81bNOKtSlp9e881" Bounds="237,102,253,19" ShowValueBox="true" isIOBox="true" Value="https://github.com/vvvv/VL.Devices.IDS#vldevicesids">
+          <Pad Id="JplGUzC81bNOKtSlp9e881" Bounds="131,164,244,20" ShowValueBox="true" isIOBox="true" Value="https://github.com/vvvv/VL.Devices.IDS#vldevicesids">
             <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
               <Choice Kind="TypeFlag" Name="String" />
             </p:TypeAnnotation>
@@ -279,7 +279,7 @@
               <p:stringtype p:Assembly="VL.Core" p:Type="VL.Core.StringType">Link</p:stringtype>
             </p:ValueBoxSettings>
           </Pad>
-          <Pad Id="PZIxt4KUfIULAbwo4PGi9Z" Comment="Enabled" Bounds="705,291,35,35" ShowValueBox="true" isIOBox="true" Value="true">
+          <Pad Id="PZIxt4KUfIULAbwo4PGi9Z" Comment="Enabled" Bounds="705,291,35,35" ShowValueBox="true" isIOBox="true" Value="True">
             <p:TypeAnnotation LastCategoryFullName="Primitive" LastDependency="VL.CoreLib.vl">
               <Choice Kind="ImmutableTypeFlag" Name="Boolean" />
             </p:TypeAnnotation>
@@ -299,7 +299,6 @@
           <Fragment Id="BEyEUiWZZ31Nk9lcc4XHBm" Patch="LXunrCCTdysPcNciL4Upy1" Enabled="true" />
           <Fragment Id="NPUfao2bI8XMogMZM7dBsS" Patch="QmZlxI5qG6lPoJhwioMVNy" Enabled="true" />
         </ProcessDefinition>
-        <Slot Id="AMU6LsKVdbTLaul0lYkqkt" Name="List Devices" />
         <Link Id="O3ygnSDKUOvNXcBFxsJRVU" Ids="K6xeG3dMZDeMa3MBtKFXye,OGsZ3LibrzUMK3sfOdHg6J" />
         <Link Id="O6f1TPBb8HTMr8opYjhHyl" Ids="VNtgJZeqzPqN36vllBYMoX,DrlRxaN4cqjOWhjPlmsGcj" />
         <Link Id="FQz9xfyUyx6Myov0QbBzRk" Ids="KLjXNFwiJ6MMiCOEijnLWM,MgAV7MocO0RPvYS5aKAjPK" />
@@ -351,5 +350,5 @@
     </Node>
   </Patch>
   <NugetDependency Id="OwchC3mdpc9L5RcsU4CmBz" Location="VL.Devices.IDS" Version="0.0.0" />
-  <NugetDependency Id="RkzOy6Uht2OMHe8qTps6dN" Location="VL.Stride" Version="2024.6.6-0034-g3b5a74f188" />
+  <NugetDependency Id="RkzOy6Uht2OMHe8qTps6dN" Location="VL.Stride" Version="2024.6.6" />
 </Document>

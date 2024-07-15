@@ -4,7 +4,7 @@ Support for uEye and uEye+ industrial cameras by [IDS Imaging](https://ids-imagi
 For use with vvvv, the visual live-programming environment for .NET: http://visualprogramming.net
 
 ## Getting started
-- For uEye+ cameras install [IDS peak](https://en.ids-imaging.com/ids-peak.html) version >= 2.80
+- For uEye+ cameras install [IDS peak](https://en.ids-imaging.com/ids-peak.html) version >= 2.8.0
 - For uEye cameras:
   - Run a "Custom" installation of IDS peak and activate "uEye Transport Layer"
   - Also install the [IDS Softwaresuite](https://de.ids-imaging.com/ids-software-suite.html) version >= 4.94
