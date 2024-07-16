@@ -10,7 +10,7 @@ For use with vvvv, the visual live-programming environment for .NET: http://visu
   - Also install the [IDS Softwaresuite](https://de.ids-imaging.com/ids-software-suite.html) version >= 4.94
 - Install as [described here](https://thegraybook.vvvv.org/reference/hde/managing-nugets.html) via commandline:
 
-    `nuget install VL.Devices.IDS -pre`
+    `nuget install VL.Devices.IDS`
 
 - Usage examples and more information are included in the pack and can be found via the [Help Browser](https://thegraybook.vvvv.org/reference/hde/findinghelp.html)
 
