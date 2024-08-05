@@ -63,7 +63,7 @@ public class IDSDeviceDefinition : DynamicEnumDefinitionBase<IDSDeviceDefinition
         
         foreach(var device in deviceManager.Devices())
         {
-            var name = device.DisplayName();
+            var name = device.VendorName() + "-" + device.ModelName() + "/" + device.SerialNumber();
             if(!devices.ContainsKey(name))
             {
                 devices.Add(name, device);
