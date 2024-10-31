@@ -48,9 +48,9 @@ namespace VL.Devices.IDS
             // and wait until execution is finished
             try
             {
-                nodeMapRemoteDevice.FindNode<peak.core.nodes.EnumerationNode>("UserSetSelector").SetCurrentEntry("Default");
-                nodeMapRemoteDevice.FindNode<peak.core.nodes.CommandNode>("UserSetLoad").Execute();
-                nodeMapRemoteDevice.FindNode<peak.core.nodes.CommandNode>("UserSetLoad").WaitUntilDone();
+                nodeMapRemoteDevice.FindNode<EnumerationNode>("UserSetSelector").SetCurrentEntry("Default");
+                nodeMapRemoteDevice.FindNode<CommandNode>("UserSetLoad").Execute();
+                nodeMapRemoteDevice.FindNode<CommandNode>("UserSetLoad").WaitUntilDone();
             }
             catch
             {
@@ -58,24 +58,24 @@ namespace VL.Devices.IDS
             }
 
             // Get the payload size for correct buffer allocation
-            var payloadSize = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("PayloadSize").Value();
+            var payloadSize = nodeMapRemoteDevice.FindNode<IntegerNode>("PayloadSize").Value();
 
             // get min and max fps
             var minFPS = nodeMapRemoteDevice.FindNode<FloatNode>("AcquisitionFrameRate").Minimum();
             var maxFPS = nodeMapRemoteDevice.FindNode<FloatNode>("AcquisitionFrameRate").Maximum();
 
             // get max width and height
-            var maxWidth = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("WidthMax").Value();
-            var maxHeight = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("HeightMax").Value();
+            var maxWidth = nodeMapRemoteDevice.FindNode<IntegerNode>("WidthMax").Value();
+            var maxHeight = nodeMapRemoteDevice.FindNode<IntegerNode>("HeightMax").Value();
 
             // get min width and height
-            var minWidth = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("WidthMinReg").Value();
-            var minHeight = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("HeightMinReg").Value();
+            var minWidth = nodeMapRemoteDevice.FindNode<IntegerNode>("WidthMinReg").Value();
+            var minHeight = nodeMapRemoteDevice.FindNode<IntegerNode>("HeightMinReg").Value();
 
             // set resolution and fps
-            nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("Width").SetValue(Math.Max(Math.Min(maxWidth, resolution.X), minWidth));
-            nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("Height").SetValue(Math.Max(Math.Min(maxHeight, resolution.Y), minHeight));
-            nodeMapRemoteDevice.FindNode<peak.core.nodes.FloatNode>("AcquisitionFrameRate").SetValue(Math.Max(Math.Min(fps, maxFPS), minFPS));
+            nodeMapRemoteDevice.FindNode<IntegerNode>("Width").SetValue(Math.Max(Math.Min(maxWidth, resolution.X), minWidth));
+            nodeMapRemoteDevice.FindNode<IntegerNode>("Height").SetValue(Math.Max(Math.Min(maxHeight, resolution.Y), minHeight));
+            nodeMapRemoteDevice.FindNode<FloatNode>("AcquisitionFrameRate").SetValue(Math.Max(Math.Min(fps, maxFPS), minFPS));
             
 
             // Get the minimum number of buffers that must be announced
@@ -246,8 +246,8 @@ namespace VL.Devices.IDS
 
             try
             {
-                _nodeMapRemoteDevice.FindNode<peak.core.nodes.CommandNode>("AcquisitionStop").Execute();
-                _nodeMapRemoteDevice.FindNode<peak.core.nodes.CommandNode>("AcquisitionStop").WaitUntilDone();
+                _nodeMapRemoteDevice.FindNode<CommandNode>("AcquisitionStop").Execute();
+                _nodeMapRemoteDevice.FindNode<CommandNode>("AcquisitionStop").WaitUntilDone();
             }
             catch (Exception e)
             {
@@ -257,8 +257,8 @@ namespace VL.Devices.IDS
             try
             {
                 _dataStream.KillWait();
-                _dataStream.StopAcquisition(peak.core.AcquisitionStopMode.Default);
-                _dataStream.Flush(peak.core.DataStreamFlushMode.DiscardAll);
+                _dataStream.StopAcquisition(AcquisitionStopMode.Default);
+                _dataStream.Flush(DataStreamFlushMode.DiscardAll);
 
                 foreach (var buffer in _dataStream.AnnouncedBuffers())
                 {
@@ -275,7 +275,7 @@ namespace VL.Devices.IDS
             try
             {
                 // Unlock parameters after acquisition stop
-                _nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("TLParamsLocked").SetValue(0);
+                _nodeMapRemoteDevice.FindNode<IntegerNode>("TLParamsLocked").SetValue(0);
                 _nodeMapRemoteDevice.Dispose();
             }
             catch (Exception e)
@@ -299,7 +299,7 @@ namespace VL.Devices.IDS
             }
 
             // Create IDS peak IPL
-            using var bayerImage = new peak.ipl.Image((peak.ipl.PixelFormatName)buffer.PixelFormat(), buffer.BasePtr(),
+            using var bayerImage = new Image((PixelFormatName)buffer.PixelFormat(), buffer.BasePtr(),
                 buffer.Size(), buffer.Width(), buffer.Height());
 
             // Debayering and convert IDS peak IPL Image to RGB8 format
