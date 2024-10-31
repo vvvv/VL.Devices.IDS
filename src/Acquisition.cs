@@ -61,8 +61,8 @@ namespace VL.Devices.IDS
             var payloadSize = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("PayloadSize").Value();
 
             // get min and max fps
-            var minFPS = nodeMapRemoteDevice.FindNode<peak.core.nodes.FloatNode>("AcquisitionFrameRateMinFunc").Value();
-            var maxFPS = nodeMapRemoteDevice.FindNode<peak.core.nodes.FloatNode>("AcquisitionFrameRateMaxFunc").Value();
+            var minFPS = nodeMapRemoteDevice.FindNode<FloatNode>("AcquisitionFrameRate").Minimum();
+            var maxFPS = nodeMapRemoteDevice.FindNode<FloatNode>("AcquisitionFrameRate").Maximum();
 
             // get max width and height
             var maxWidth = nodeMapRemoteDevice.FindNode<peak.core.nodes.IntegerNode>("WidthMax").Value();
