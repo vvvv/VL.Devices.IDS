@@ -61,21 +61,24 @@ namespace VL.Devices.IDS
             var payloadSize = nodeMapRemoteDevice.FindNode<IntegerNode>("PayloadSize").Value();
 
             // get min and max fps
-            var minFPS = nodeMapRemoteDevice.FindNode<FloatNode>("AcquisitionFrameRate").Minimum();
-            var maxFPS = nodeMapRemoteDevice.FindNode<FloatNode>("AcquisitionFrameRate").Maximum();
+            var aquisitionFrameRateNode = nodeMapRemoteDevice.FindNode<FloatNode>("AcquisitionFrameRate");
+            var minFPS = aquisitionFrameRateNode.Minimum();
+            var maxFPS = aquisitionFrameRateNode.Maximum();
 
             // get max width and height
             var maxWidth = nodeMapRemoteDevice.FindNode<IntegerNode>("WidthMax").Value();
             var maxHeight = nodeMapRemoteDevice.FindNode<IntegerNode>("HeightMax").Value();
 
             // get min width and height
-            var minWidth = nodeMapRemoteDevice.FindNode<IntegerNode>("WidthMinReg").Value();
-            var minHeight = nodeMapRemoteDevice.FindNode<IntegerNode>("HeightMinReg").Value();
+            var widthNode = nodeMapRemoteDevice.FindNode<IntegerNode>("Width");
+            var heightNode = nodeMapRemoteDevice.FindNode<IntegerNode>("Height");
+            var minWidth = widthNode.Minimum();
+            var minHeight = heightNode.Minimum();
 
             // set resolution and fps
-            nodeMapRemoteDevice.FindNode<IntegerNode>("Width").SetValue(Math.Max(Math.Min(maxWidth, resolution.X), minWidth));
-            nodeMapRemoteDevice.FindNode<IntegerNode>("Height").SetValue(Math.Max(Math.Min(maxHeight, resolution.Y), minHeight));
-            nodeMapRemoteDevice.FindNode<FloatNode>("AcquisitionFrameRate").SetValue(Math.Max(Math.Min(fps, maxFPS), minFPS));
+            widthNode.SetValue(Math.Max(Math.Min(maxWidth, resolution.X), minWidth));
+            heightNode.SetValue(Math.Max(Math.Min(maxHeight, resolution.Y), minHeight));
+            aquisitionFrameRateNode.SetValue(Math.Max(Math.Min(fps, maxFPS), minFPS));
             
 
             // Get the minimum number of buffers that must be announced
