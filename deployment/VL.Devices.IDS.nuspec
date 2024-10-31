@@ -3,10 +3,11 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>VL.Devices.IDS</id>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <title>VL.Devices.IDS</title>
     <authors>vvvv</authors>
     <projectUrl>https://github.com/vvvv/VL.Devices.IDS</projectUrl>
+    <repository type="git" url="https://github.com/vvvv/VL.Devices.IDS.git" />
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Support for uEye and uEye+ industrial cameras by IDS Imaging</description>
     <tags>VL, peak, camera, capture, video, ueye</tags>
