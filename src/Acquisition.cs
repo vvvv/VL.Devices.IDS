@@ -75,11 +75,21 @@ namespace VL.Devices.IDS
             var minWidth = widthNode.Minimum();
             var minHeight = heightNode.Minimum();
 
+            var width = nodeMapRemoteDevice.FindNode<IntegerNode>("Width").Value();
+            var height = nodeMapRemoteDevice.FindNode<IntegerNode>("Height").Value();
+
+            //return debug info
+            videoIn.Info = "Max. resolution (w x h): " + maxWidth + " x " + maxHeight
+                          + $"\r\nMin. resolution (w x h): " + minWidth + " x " + minHeight
+                          + $"\r\nIncrement (w/h): " + widthNode.Increment().ToString() + "/" + heightNode.Increment().ToString()
+                          + $"\r\nCurrent resolution (w x h): " + width + " x " + height
+                          + $"\r\nFramerate range: [{minFPS}, {maxFPS}], current FPS: {aquisitionFrameRateNode.Value()}" +
+                            $"\r\n";
+
             // set resolution and fps
             widthNode.SetValue(Math.Max(Math.Min(maxWidth, resolution.X), minWidth));
             heightNode.SetValue(Math.Max(Math.Min(maxHeight, resolution.Y), minHeight));
             aquisitionFrameRateNode.SetValue(Math.Max(Math.Min(fps, maxFPS), minFPS));
-            
 
             // Get the minimum number of buffers that must be announced
             var bufferCountMax = dataStream.NumBuffersAnnouncedMinRequired();
@@ -108,16 +118,6 @@ namespace VL.Devices.IDS
             // Start the acquisition in the Remote Device
             nodeMapRemoteDevice.FindNode<CommandNode>("AcquisitionStart").Execute();
             nodeMapRemoteDevice.FindNode<CommandNode>("AcquisitionStart").WaitUntilDone();
-
-            var width = nodeMapRemoteDevice.FindNode<IntegerNode>("Width").Value();
-            var height = nodeMapRemoteDevice.FindNode<IntegerNode>("Height").Value();
-
-            //return debug info
-            videoIn.Info = "Max. resolution (w x h): " + maxWidth + " x " + maxHeight
-                          + $"\r\nMin. resolution (w x h): " + minWidth + " x " + minHeight
-                          + $"\r\nCurrent resolution (w x h): " + width + " x " + height
-                          + $"\r\nFramerate range: [{minFPS}, {maxFPS}], current FPS: {nodeMapRemoteDevice.FindNode<FloatNode>("AcquisitionFrameRate").Value()}" +
-                            $"\r\n";
 
             /*
             //debug properites list
