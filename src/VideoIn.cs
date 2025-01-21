@@ -22,6 +22,7 @@ namespace VL.Devices.IDS
         private int _fps;
         private IConfiguration? _configuration;
         private bool _enabled;
+        private string _defaultUserSet;
 
         internal string Info { get; set; } = "";
         internal Spread<PropertyInfo> PropertyInfos { get; set; } = new SpreadBuilder<PropertyInfo>().ToSpread();
@@ -39,6 +40,7 @@ namespace VL.Devices.IDS
             [DefaultValue("30")] int FPS,
             IConfiguration configuration,
             [DefaultValue("true")] bool enabled,
+            [DefaultValue("Default")] string defaultUserSet,
             out string Info)
         {
             // By comparing the descriptor we can be sure that on re-connect of the device we see the change
@@ -49,6 +51,7 @@ namespace VL.Devices.IDS
                 _fps = FPS;
                 _configuration = configuration;
                 _enabled = enabled;
+                _defaultUserSet = defaultUserSet;
                 _changedTicket++;
             }
 
@@ -69,7 +72,7 @@ namespace VL.Devices.IDS
 
             try
             {
-                var result = Acquisition.Start(this, device, _logger, _resolution, _fps, _configuration);
+                var result = Acquisition.Start(this, device, _logger, _resolution, _fps, _configuration, _defaultUserSet);
                 _aquicitionStarted.OnNext(result);
                 return result;
             }
