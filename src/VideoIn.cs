@@ -22,7 +22,7 @@ namespace VL.Devices.IDS
         private int _fps;
         private IConfiguration? _configuration;
         private bool _enabled;
-        private string _defaultUserSet;
+        private string? _defaultUserSet;
 
         internal string Info { get; set; } = "";
         internal Spread<PropertyInfo> PropertyInfos { get; set; } = new SpreadBuilder<PropertyInfo>().ToSpread();
@@ -40,11 +40,11 @@ namespace VL.Devices.IDS
             [DefaultValue("30")] int FPS,
             IConfiguration configuration,
             [DefaultValue("true")] bool enabled,
-            [DefaultValue("Default")] string defaultUserSet,
+            [Pin(Visibility = PinVisibility.Optional), DefaultValue("Default")] string defaultUserSet,
             out string Info)
         {
             // By comparing the descriptor we can be sure that on re-connect of the device we see the change
-            if (device?.Tag != _device || resolution != _resolution || FPS != _fps || configuration != _configuration || enabled != _enabled)
+            if (device?.Tag != _device || resolution != _resolution || FPS != _fps || configuration != _configuration || enabled != _enabled || defaultUserSet != _defaultUserSet)
             {
                 _device = device?.Tag as DeviceDescriptor;
                 _resolution = resolution;
@@ -72,7 +72,7 @@ namespace VL.Devices.IDS
 
             try
             {
-                var result = Acquisition.Start(this, device, _logger, _resolution, _fps, _configuration, _defaultUserSet);
+                var result = Acquisition.Start(this, device, _logger, _resolution, _fps, _configuration, _defaultUserSet ?? "Default");
                 _aquicitionStarted.OnNext(result);
                 return result;
             }
