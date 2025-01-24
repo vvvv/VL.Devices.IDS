@@ -12,7 +12,7 @@ namespace VL.Devices.IDS
 {
     internal class Acquisition : IVideoPlayer
     {
-        public static Acquisition? Start(VideoIn videoIn, DeviceDescriptor deviceDescriptor, ILogger logger, Int2 resolution, int fps, IConfiguration? configuration)
+        public static Acquisition? Start(VideoIn videoIn, DeviceDescriptor deviceDescriptor, ILogger logger, Int2 resolution, int fps, IConfiguration? configuration, bool CorrectHotPixels)
         {
             logger.Log(LogLevel.Information, "Starting image acquisition on {device}", deviceDescriptor.DisplayName());
 
@@ -141,7 +141,7 @@ namespace VL.Devices.IDS
             }
             videoIn.Info += $"\r\n" + sb.ToString();*/
 
-            return new Acquisition(logger, device, dataStream, nodeMapRemoteDevice, new Int2((int)width, (int)height));
+            return new Acquisition(logger, device, dataStream, nodeMapRemoteDevice, new Int2((int)width, (int)height), CorrectHotPixels);
         }
 
         static void CollectPropertiesInfos(SpreadBuilder<PropertyInfo> spb, NodeMap propertyMap)
@@ -220,8 +220,10 @@ namespace VL.Devices.IDS
         private readonly NodeMap _nodeMapRemoteDevice;
         private readonly ImageConverter _imageConverter;
         private readonly Int2 _resolution;
+        private readonly bool _correctHotPixels;
+        private readonly HotpixelCorrection? _m_hotpixelCorrection;
 
-        public Acquisition(ILogger logger, Device device, DataStream dataStream, NodeMap nodeMapRemoteDevice, Int2 resolution)
+        public Acquisition(ILogger logger, Device device, DataStream dataStream, NodeMap nodeMapRemoteDevice, Int2 resolution, bool CorrectHotPixels)
         {
             _idsPeakLibSubscription = IdsPeakLibrary.Use();
             _logger = logger;
@@ -230,6 +232,8 @@ namespace VL.Devices.IDS
             _nodeMapRemoteDevice = nodeMapRemoteDevice;
             _imageConverter = new ImageConverter();
             _resolution = resolution;
+            _correctHotPixels = CorrectHotPixels;
+            if (_correctHotPixels) _m_hotpixelCorrection = new peak.ipl.HotpixelCorrection();
         }
 
         public PixelFormat PixelFormat { get; set; } = new PixelFormat(PixelFormatName.BGRa8);
@@ -305,8 +309,22 @@ namespace VL.Devices.IDS
             using var bayerImage = new Image((PixelFormatName)buffer.PixelFormat(), buffer.BasePtr(),
                 buffer.Size(), buffer.Width(), buffer.Height());
 
-            // Debayering and convert IDS peak IPL Image to RGB8 format
-            var bgraImage = _imageConverter.Convert(bayerImage, PixelFormat);
+            Image bgraImage;
+
+            //Apply hotpixel correction
+            if (_correctHotPixels)
+            {
+                var vec = _m_hotpixelCorrection.Detect(bayerImage);
+                var correctedImage = _m_hotpixelCorrection.Correct(bayerImage, vec);
+
+                // Debayering and convert IDS peak IPL Image to RGB8 format
+                bgraImage = _imageConverter.Convert(_m_hotpixelCorrection.Correct(correctedImage, vec), PixelFormat);
+            }
+            else
+            {
+                // Debayering and convert IDS peak IPL Image to RGB8 format
+                bgraImage = _imageConverter.Convert(bayerImage, PixelFormat);
+            }
 
             var width = (int)bgraImage.Width();
             var height = (int)bgraImage.Height();

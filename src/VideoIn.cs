@@ -22,6 +22,7 @@ namespace VL.Devices.IDS
         private int _fps;
         private IConfiguration? _configuration;
         private bool _enabled;
+        private bool _correctHotPixels;
 
         internal string Info { get; set; } = "";
         internal Spread<PropertyInfo> PropertyInfos { get; set; } = new SpreadBuilder<PropertyInfo>().ToSpread();
@@ -38,17 +39,19 @@ namespace VL.Devices.IDS
             [DefaultValue("640, 480")] Int2 resolution,
             [DefaultValue("30")] int FPS,
             IConfiguration configuration,
+            [Pin(Visibility = PinVisibility.Optional), DefaultValue("true")] bool CorrectHotPixels,
             [DefaultValue("true")] bool enabled,
             out string Info)
         {
             // By comparing the descriptor we can be sure that on re-connect of the device we see the change
-            if (device?.Tag != _device || resolution != _resolution || FPS != _fps || configuration != _configuration || enabled != _enabled)
+            if (device?.Tag != _device || resolution != _resolution || FPS != _fps || configuration != _configuration || enabled != _enabled || CorrectHotPixels != _correctHotPixels)
             {
                 _device = device?.Tag as DeviceDescriptor;
                 _resolution = resolution;
                 _fps = FPS;
                 _configuration = configuration;
                 _enabled = enabled;
+                _correctHotPixels = CorrectHotPixels;
                 _changedTicket++;
             }
 
@@ -69,7 +72,7 @@ namespace VL.Devices.IDS
 
             try
             {
-                var result = Acquisition.Start(this, device, _logger, _resolution, _fps, _configuration);
+                var result = Acquisition.Start(this, device, _logger, _resolution, _fps, _configuration, _correctHotPixels);
                 _aquicitionStarted.OnNext(result);
                 return result;
             }
