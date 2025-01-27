@@ -19,10 +19,10 @@
 
   <ItemGroup>
     <Reference Include="ids_peak_dotnet">
-      <HintPath>..\dependencies\ids_peak_dotnet.dll</HintPath>
+      <HintPath>..\lib\net8.0\ids_peak_dotnet.dll</HintPath>
     </Reference>
     <Reference Include="ids_peak_ipl_dotnet">
-      <HintPath>..\dependencies\ids_peak_ipl_dotnet.dll</HintPath>
+      <HintPath>..\lib\net8.0\ids_peak_ipl_dotnet.dll</HintPath>
     </Reference>
   </ItemGroup>
 
