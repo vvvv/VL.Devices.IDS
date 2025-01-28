@@ -316,10 +316,10 @@ namespace VL.Devices.IDS
             if (_correctHotPixels)
             {
                 var vec = _m_hotpixelCorrection.Detect(bayerImage);
-                var correctedImage = _m_hotpixelCorrection.Correct(bayerImage, vec);
+                using var correctedImage = _m_hotpixelCorrection.Correct(bayerImage, vec);
 
                 // Debayering and convert IDS peak IPL Image to RGB8 format
-                bgraImage = _imageConverter.Convert(_m_hotpixelCorrection.Correct(correctedImage, vec), PixelFormat);
+                bgraImage = _imageConverter.Convert(correctedImage, PixelFormat);
             }
             else
             {
