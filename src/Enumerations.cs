@@ -8,7 +8,7 @@ namespace VL.Devices.IDS
 {
     public class Enumerations
     {
-        public enum UserSetDefault
+        public enum UserSetSelector
         {
             Default,
             HighSpeed,

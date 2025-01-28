@@ -23,7 +23,7 @@ namespace VL.Devices.IDS
         private int _fps;
         private IConfiguration? _configuration;
         private bool _enabled;
-        private UserSetDefault _defaultUserSet;
+        private UserSetSelector _defaultUserSet;
 
         internal string Info { get; set; } = "";
         internal Spread<PropertyInfo> PropertyInfos { get; set; } = new SpreadBuilder<PropertyInfo>().ToSpread();
@@ -40,19 +40,19 @@ namespace VL.Devices.IDS
             [DefaultValue("640, 480")] Int2 resolution,
             [DefaultValue("30")] int FPS,
             IConfiguration configuration,
-            [Pin(Name = "UserSet Default", Visibility = PinVisibility.Optional), DefaultValue("Default")] UserSetDefault UserSetDefault,
+            [Pin(Name = "UserSet", Visibility = PinVisibility.Optional), DefaultValue("Default")] UserSetSelector UserSet,
             [DefaultValue("true")] bool enabled,
             out string Info)
         {
             // By comparing the descriptor we can be sure that on re-connect of the device we see the change
-            if (device?.Tag != _device || resolution != _resolution || FPS != _fps || configuration != _configuration || enabled != _enabled || UserSetDefault != _defaultUserSet)
+            if (device?.Tag != _device || resolution != _resolution || FPS != _fps || configuration != _configuration || enabled != _enabled || UserSet != _defaultUserSet)
             {
                 _device = device?.Tag as DeviceDescriptor;
                 _resolution = resolution;
                 _fps = FPS;
                 _configuration = configuration;
                 _enabled = enabled;
-                _defaultUserSet = UserSetDefault;
+                _defaultUserSet = UserSet;
                 _changedTicket++;
             }
 
