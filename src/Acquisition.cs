@@ -293,6 +293,7 @@ namespace VL.Devices.IDS
             _imageConverter.Dispose();
             _device.Dispose();
             _idsPeakLibSubscription.Dispose();
+            _m_hotpixelCorrection?.Dispose();
         }
 
         public unsafe IResourceProvider<VideoFrame>? GrabVideoFrame()
