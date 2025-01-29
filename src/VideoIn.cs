@@ -6,6 +6,7 @@ using VL.Model;
 using System.Reactive.Subjects;
 using System.Reactive.Linq;
 using VL.Devices.IDS.Advanced;
+using static VL.Devices.IDS.Enumerations;
 
 namespace VL.Devices.IDS
 {
@@ -22,6 +23,7 @@ namespace VL.Devices.IDS
         private int _fps;
         private IConfiguration? _configuration;
         private bool _enabled;
+        private UserSetSelector _defaultUserSet;
         private bool _correctHotPixels;
 
         internal string Info { get; set; } = "";
@@ -39,18 +41,20 @@ namespace VL.Devices.IDS
             [DefaultValue("640, 480")] Int2 resolution,
             [DefaultValue("30")] int FPS,
             IConfiguration configuration,
+            [Pin(Name = "UserSet", Visibility = PinVisibility.Optional), DefaultValue("Default")] UserSetSelector UserSet,
             [Pin(Visibility = PinVisibility.Optional), DefaultValue("true")] bool CorrectHotPixels,
             [DefaultValue("true")] bool enabled,
             out string Info)
         {
             // By comparing the descriptor we can be sure that on re-connect of the device we see the change
-            if (device?.Tag != _device || resolution != _resolution || FPS != _fps || configuration != _configuration || enabled != _enabled || CorrectHotPixels != _correctHotPixels)
+            if (device?.Tag != _device || resolution != _resolution || FPS != _fps || configuration != _configuration || enabled != _enabled || UserSet != _defaultUserSet || CorrectHotPixels != _correctHotPixels)
             {
                 _device = device?.Tag as DeviceDescriptor;
                 _resolution = resolution;
                 _fps = FPS;
                 _configuration = configuration;
                 _enabled = enabled;
+                _defaultUserSet = UserSet;
                 _correctHotPixels = CorrectHotPixels;
                 _changedTicket++;
             }
@@ -72,7 +76,7 @@ namespace VL.Devices.IDS
 
             try
             {
-                var result = Acquisition.Start(this, device, _logger, _resolution, _fps, _configuration, _correctHotPixels);
+                var result = Acquisition.Start(this, device, _logger, _resolution, _fps, _configuration, _defaultUserSet.ToString(), _correctHotPixels);
                 _aquicitionStarted.OnNext(result);
                 return result;
             }
