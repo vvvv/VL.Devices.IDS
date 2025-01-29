@@ -73,7 +73,7 @@ namespace VL.Devices.IDS
 
             try
             {
-                var result = Acquisition.Start(this, device, _logger, _resolution, _fps, _configuration, _defaultUserSet.ToString() ?? "Default");
+                var result = Acquisition.Start(this, device, _logger, _resolution, _fps, _configuration, _defaultUserSet.ToString());
                 _aquicitionStarted.OnNext(result);
                 return result;
             }
