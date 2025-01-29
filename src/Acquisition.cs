@@ -12,7 +12,7 @@ namespace VL.Devices.IDS
 {
     internal class Acquisition : IVideoPlayer
     {
-        public static Acquisition? Start(VideoIn videoIn, DeviceDescriptor deviceDescriptor, ILogger logger, Int2 resolution, int fps, IConfiguration? configuration)
+        public static Acquisition? Start(VideoIn videoIn, DeviceDescriptor deviceDescriptor, ILogger logger, Int2 resolution, int fps, IConfiguration? configuration, string defaultUserSet)
         {
             logger.Log(LogLevel.Information, "Starting image acquisition on {device}", deviceDescriptor.DisplayName());
 
@@ -48,7 +48,7 @@ namespace VL.Devices.IDS
             // and wait until execution is finished
             try
             {
-                nodeMapRemoteDevice.FindNode<EnumerationNode>("UserSetSelector").SetCurrentEntry("Default");
+                nodeMapRemoteDevice.FindNode<EnumerationNode>("UserSetSelector").SetCurrentEntry(defaultUserSet);
                 nodeMapRemoteDevice.FindNode<CommandNode>("UserSetLoad").Execute();
                 nodeMapRemoteDevice.FindNode<CommandNode>("UserSetLoad").WaitUntilDone();
             }
