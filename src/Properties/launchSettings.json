@@ -1,9 +1,9 @@
 {
   "profiles": {
-    "vvvv gamma 5.3": {
+    "vvvv gamma 7.4": {
       "commandName": "Executable",
-      "executablePath": "C:\\Program Files\\vvvv\\vvvv_gamma_6.6-0034-g3b5a74f188\\vvvv.exe",
-      "commandLineArgs": "--package-repositories \"C:\\Users\\alex\\Documents\\libs\" --editable-packages VL.Devices.IDS -o \"C:\\Users\\alex\\Documents\\libs\\VL.Devices.IDS\\help\\Explanation Overview.vl\""
+      "executablePath": "C:\\Program Files\\vvvv\\vvvv_gamma_7.4-win-x64\\vvvv.exe",
+      "commandLineArgs": "--package-repositories \"C:\\vl-libs\" --editable-packages VL.Devices.IDS"
     }
   }
 }

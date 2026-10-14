@@ -4,25 +4,15 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <!--<GenerateDocumentationFile>True</GenerateDocumentationFile>-->
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <OutputPath>..\lib</OutputPath>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="VL.Core" Version="2025.7.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="IDSImaging.Peak.API">
-      <HintPath>..\lib\net8.0\IDSImaging.Peak.API.dll</HintPath>
-    </Reference>
-    <Reference Include="IDSImaging.Peak.Common">
-      <HintPath>..\lib\net8.0\IDSImaging.Peak.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="IDSImaging.Peak.IPL">
-      <HintPath>..\lib\net8.0\IDSImaging.Peak.IPL.dll</HintPath>
-    </Reference>
+    <PackageReference Include="IDSImaging.Peak.API" Version="1.17.0" />
+    <PackageReference Include="IDSImaging.Peak.IPL" Version="1.18.0" />
+    <PackageReference Include="VL.Core" Version="2025.7.4" />
   </ItemGroup>
 
   <ItemGroup>
