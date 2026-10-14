@@ -14,6 +14,12 @@ For use with vvvv, the visual live-programming environment for .NET: http://vvvv
 
 - Usage examples and more information are included in the pack and can be found via the [Help Browser](https://thegraybook.vvvv.org/reference/hde/findinghelp.html)
 
+## Changing properties while the camera is running
+- `ConfigProperty` is applied when the acquisition starts. Changing its value restarts the whole acquisition (device is closed and opened again).
+- `SetProperty` writes a value to the running camera without a restart, e.g. `ExposureTime` or `Gain`. The value is written on every change and again after each restart of the acquisition. Numeric values are clamped to the current range (e.g. the maximum `ExposureTime` depends on the frame rate). Properties which are locked during acquisition (`Width`, `Height`, `PixelFormat`, ...) cannot be changed this way.
+- `GetProperty` returns a snapshot taken at acquisition start. Enable its optional `Live` pin to read the current value from the running camera.
+- Frames already queued in the driver may still carry the previous value. Use the `Applied` output of `SetProperty` to skip a few frames after a change if needed.
+
 ## Contributing
 - Report issues on [the vvvv forum](https://discourse.vvvv.org/c/vvvv-gamma/28)
 - For custom development requests, please [get in touch](mailto:devvvvs@vvvv.org)

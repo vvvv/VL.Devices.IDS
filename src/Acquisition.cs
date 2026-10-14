@@ -152,37 +152,9 @@ namespace VL.Devices.IDS
                 .Where(x => x.Type() != NodeType.Command);
             foreach (var p in props)
             {
-                switch (p.Type())
-                {
-                    case NodeType.Float:
-                        var f = propertyMap.FindNodeFloat(p.Name());
-                        spb.Add(new PropertyInfo(f.Name(), f.Value(), f.Description(), f.Minimum(), f.Maximum(), Spread<string>.Empty, f.Type().ToString(), f.AccessStatus().ToString()));
-                        break;
-
-                    case NodeType.Integer:
-                        var i = propertyMap.FindNodeInteger(p.Name());
-                        spb.Add(new PropertyInfo(i.Name(), i.Value(), i.Description(), i.Minimum(), i.Maximum(), Spread<string>.Empty, i.Type().ToString(), i.AccessStatus().ToString()));
-                        break;
-
-                    case NodeType.Boolean:
-                        var b = propertyMap.FindNodeBoolean(p.Name());
-                        spb.Add(new PropertyInfo(b.Name(), b.Value(), b.Description(), false, true, Spread<string>.Empty, b.Type().ToString(), b.AccessStatus().ToString()));
-                        break;
-
-                    case NodeType.String:
-                        var s = propertyMap.FindNodeString(p.Name());
-                        spb.Add(new PropertyInfo(s.Name(), s.Value(), s.Description(), "", "", Spread<string>.Empty, s.Type().ToString(), s.AccessStatus().ToString()));
-                        break;
-
-                    case NodeType.Enumeration:
-                        var e = propertyMap.FindNodeEnumeration(p.Name());
-                        spb.Add(new PropertyInfo(e.Name(), e.CurrentEntry().Name(), e.Description(), "", "", e.Entries().Select(x => x.Name()).ToSpread(), e.Type().ToString(), e.AccessStatus().ToString()));
-                        break;
-
-                    default:
-                        // cannot set value
-                        break;
-                }
+                var info = NodeMapAccess.ToPropertyInfo(propertyMap, p);
+                if (info != null)
+                    spb.Add(info);
             }
         }
 
@@ -242,12 +214,36 @@ namespace VL.Devices.IDS
 
         public NodeMap NodeMap => _device.RemoteDevice().NodeMaps()[0];
 
+        // Guards node map access of the running acquisition (e.g. by SetProperty) against a concurrent Dispose
+        private readonly object _nodeMapLock = new();
+
+        /// <summary>
+        /// Runs the given function on the remote device node map while the acquisition is running.
+        /// Returns false if the acquisition has already been disposed.
+        /// </summary>
+        public bool TryAccessNodeMap<T>(Func<NodeMap, T> func, out T result)
+        {
+            lock (_nodeMapLock)
+            {
+                if (IsDisposed)
+                {
+                    result = default!;
+                    return false;
+                }
+                result = func(_nodeMapRemoteDevice);
+                return true;
+            }
+        }
+
         public void Dispose()
         {
-            if (IsDisposed)
-                return;
+            lock (_nodeMapLock)
+            {
+                if (IsDisposed)
+                    return;
 
-            IsDisposed = true;
+                IsDisposed = true;
+            }
 
             _logger.Log(LogLevel.Information, "Stopping image acquisition");
 
