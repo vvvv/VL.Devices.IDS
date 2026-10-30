@@ -21,7 +21,7 @@ namespace VL.Devices.IDS
             VideoIn? input,
             string name,
             out PropertyInfo? propertyInfo,
-            [Pin(Visibility = Model.PinVisibility.Optional)] bool live = false)
+            bool live = false)
         {
             if (input is null)
             {
