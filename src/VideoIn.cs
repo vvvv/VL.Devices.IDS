@@ -68,6 +68,11 @@ namespace VL.Devices.IDS
 
         internal IObservable<Acquisition> AcquisitionStarted => _aquicitionStarted.Where(a => a != null && !a.IsDisposed)!;
 
+        /// <summary>
+        /// The currently running acquisition or null if none is running.
+        /// </summary>
+        internal Acquisition? CurrentAcquisition => _aquicitionStarted.Value is { IsDisposed: false } a ? a : null;
+
         IVideoPlayer? IVideoSource2.Start(VideoPlaybackContext ctx)
         {
             var device = _device;
